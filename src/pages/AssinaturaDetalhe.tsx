@@ -1,0 +1,462 @@
+import { useState } from 'react'
+import { Typography, Tag, Button, Collapse, Divider, Tooltip, Card, Empty, Alert } from 'antd'
+import {
+  CreditCardOutlined,
+  QuestionCircleOutlined,
+  BarcodeOutlined,
+  CloseOutlined,
+  ArrowLeftOutlined,
+  HomeOutlined,
+  SyncOutlined,
+  DownloadOutlined,
+  QrcodeOutlined,
+} from '@ant-design/icons'
+import { useParams, useNavigate, Link } from 'react-router-dom'
+import {
+  savedCards,
+  subscriptionDetails,
+  accountAlternativeCardId,
+  setAccountAlternativeCardId,
+  paymentHistory,
+  type SavedCard,
+  type PaymentHistoryItem,
+} from '../data/mockData'
+import CardBrandIcon from '../components/CardBrandIcon'
+import ChangePaymentModal from '../components/ChangePaymentModal'
+import { useIsMobile } from '../hooks/useIsMobile'
+
+const { Title, Text } = Typography
+
+function CardDisplay({ card }: { card: SavedCard }) {
+  return (
+    <span className="font-medium">
+      {card.brand || 'Cartão'} •••• {card.last4}
+    </span>
+  )
+}
+
+const statusTagColor: Record<string, string> = {
+  'Pago': 'green',
+  'Reembolsada': 'red',
+  'Cancelada': 'default',
+  'Aguardando pagamento': 'gold',
+}
+
+function PaymentHistoryRow({ item }: { item: PaymentHistoryItem }) {
+  const isAguardando = item.status === 'Aguardando pagamento'
+
+  const actionButton = () => {
+    if (!isAguardando) return null
+    if (item.metodo === 'cartao') return (
+      <Button size="small" icon={<SyncOutlined />}>Trocar cartão</Button>
+    )
+    if (item.metodo === 'boleto') return (
+      <Button size="small" icon={<DownloadOutlined />}>Baixar Boleto</Button>
+    )
+    if (item.metodo === 'pix') return (
+      <Button size="small" icon={<QrcodeOutlined />}>Pagar com Pix</Button>
+    )
+    return null
+  }
+
+  return (
+    <div className="bg-[#fafafa] rounded px-4 py-2 flex flex-col gap-2">
+      {/* Row 1: Fatura + Tag */}
+      <div className="flex items-center justify-between">
+        <Text className="text-sm">
+          Fatura: <Text strong>{item.fatura}</Text>
+        </Text>
+        <Tag color={statusTagColor[item.status]} className="!text-xs !m-0">
+          {item.status}
+        </Tag>
+      </div>
+      {/* Row 2: Valor + Pagamento ou Button */}
+      <div className="flex items-center justify-between">
+        <Text strong className="text-sm">{item.valor}</Text>
+        {item.pagamento && (
+          <Text className="text-sm">Pagamento: {item.pagamento}</Text>
+        )}
+        {actionButton()}
+      </div>
+      {/* Row 3: Alert */}
+      {isAguardando && item.erroCartao && (
+        <Alert
+          type="error"
+          message="Não foi possível processar o pagamento no cartão."
+          showIcon
+          className="!py-2 !text-sm"
+        />
+      )}
+      {isAguardando && !item.erroCartao && (item.metodo === 'boleto' || item.metodo === 'pix') && (
+        <Alert
+          type="warning"
+          message="Evite cancelamentos. Aguardando pagamento."
+          showIcon
+          className="!py-2 !text-sm"
+        />
+      )}
+    </div>
+  )
+}
+
+export default function AssinaturaDetalhe() {
+  const { contrato } = useParams<{ contrato: string }>()
+  const navigate = useNavigate()
+  const isMobile = useIsMobile()
+
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false)
+  const [paymentTarget, setPaymentTarget] = useState<'primary' | 'alternative'>('primary')
+  const [primaryCardIdOverride, setPrimaryCardIdOverride] = useState<string | null | undefined>(undefined)
+  const [, setTick] = useState(0)
+
+  const baseDetail = contrato ? subscriptionDetails[contrato] : null
+
+  if (!baseDetail) {
+    return (
+      <div className="flex-1 bg-[#fafafa] min-h-screen">
+        <div className="px-4 py-4 md:px-8 md:py-8">
+          <div className="flex items-center gap-1 text-sm mb-4 flex-wrap">
+            <HomeOutlined className="text-gray-400" />
+            <span className="text-gray-400 px-1">/</span>
+            <Link to="/assinaturas" className="text-gray-400 hover:text-gray-600">Minhas assinaturas</Link>
+          </div>
+          <Card>
+            <Empty description="Assinatura não encontrada">
+              <Button type="primary" onClick={() => navigate('/assinaturas')}>
+                Voltar para assinaturas
+              </Button>
+            </Empty>
+          </Card>
+        </div>
+      </div>
+    )
+  }
+
+  const detail = {
+    ...baseDetail,
+    primaryCardId: primaryCardIdOverride !== undefined ? (primaryCardIdOverride ?? '') : baseDetail.primaryCardId,
+    formaPagamento: primaryCardIdOverride !== undefined && primaryCardIdOverride
+      ? 'Cartão de crédito'
+      : baseDetail.formaPagamento,
+  }
+
+  const alternativeCardId = accountAlternativeCardId
+
+  const isBoleto = detail.formaPagamento === 'Boleto bancário'
+  const primaryCard = savedCards.find((c) => c.id === detail.primaryCardId)
+  const alternativeCard = alternativeCardId
+    ? savedCards.find((c) => c.id === alternativeCardId)
+    : null
+
+  const handleEditPayment = (target: 'primary' | 'alternative') => {
+    setPaymentTarget(target)
+    setPaymentModalOpen(true)
+  }
+
+  const handleAddAlternative = () => {
+    setPaymentTarget('alternative')
+    setPaymentModalOpen(true)
+  }
+
+  const currentCardIdForTarget =
+    paymentTarget === 'primary'
+      ? detail.primaryCardId ?? null
+      : alternativeCardId ?? null
+
+  const handleConfirmPayment = (cardId: string) => {
+    if (paymentTarget === 'alternative') {
+      setAccountAlternativeCardId(cardId)
+      setTick((t) => t + 1)
+    } else if (paymentTarget === 'primary') {
+      setPrimaryCardIdOverride(cardId)
+    }
+  }
+
+  return (
+    <div className="flex-1 bg-[#fafafa] min-h-screen">
+      <div className="px-4 py-4 md:px-8 md:py-8">
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-1 text-sm mb-4 flex-wrap">
+          <HomeOutlined className="text-gray-400" />
+          <span className="text-gray-400 px-1">/</span>
+          <Link to="/assinaturas" className="text-gray-400 hover:text-gray-600">Minhas assinaturas</Link>
+        </div>
+
+        {/* Back button on mobile */}
+        {isMobile && (
+          <Button
+            type="text"
+            icon={<ArrowLeftOutlined />}
+            onClick={() => navigate('/assinaturas')}
+            className="!px-0 !mb-2"
+          >
+            Voltar
+          </Button>
+        )}
+
+        {/* Title row + Cancel button */}
+        <div className="flex items-center justify-between mb-6">
+          <Title level={3} className="!mb-0 !text-xl md:!text-2xl" style={{ color: 'rgba(0,0,0,0.85)' }}>
+            Assinatura {detail.contrato}
+          </Title>
+          {!isMobile && (
+            <Button danger icon={<CloseOutlined />}>
+              Cancelar Assinatura
+            </Button>
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="flex flex-col gap-5">
+          {/* Product info card */}
+          <Card size="small">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0">
+                <img
+                  src={detail.imagemProduto}
+                  alt={detail.produto}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="min-w-0">
+                <Text strong className="block text-base truncate">
+                  {detail.produto}
+                </Text>
+                <Text type="secondary" className="text-sm">
+                  Produtor: <Text strong>{detail.produtor}</Text>
+                </Text>
+              </div>
+            </div>
+          </Card>
+
+          {/* Row 1: Purchase info + Payment methods */}
+          <div className="flex flex-col md:grid md:grid-cols-2 md:items-stretch gap-5">
+            {/* Purchase info */}
+            <Card size="small" className="flex flex-col">
+              <Text type="secondary" className="text-xs block mb-3">
+                Informações da compra
+              </Text>
+              <div className="flex flex-col gap-1.5">
+                <Text className="text-sm">Nome: {detail.nome}</Text>
+                <Text className="text-sm break-all">E-mail: {detail.email}</Text>
+                <Text className="text-sm">Telefone: {detail.telefone}</Text>
+                <div className="flex items-center gap-1.5">
+                  <Text className="text-sm">Forma de pagamento:</Text>
+                  {primaryCard ? (
+                    <>
+                      <CardBrandIcon brand={primaryCard.brand} size={28} />
+                      <Text className="text-sm">{primaryCard.brand || 'Cartão'} •••• {primaryCard.last4}</Text>
+                    </>
+                  ) : detail.cardFinal ? (
+                    <Text className="text-sm">Cartão •••• {detail.cardFinal}</Text>
+                  ) : (
+                    <Text className="text-sm">{detail.formaPagamento}</Text>
+                  )}
+                </div>
+              </div>
+            </Card>
+
+            {/* Payment methods section */}
+              <Card size="small" className="!p-0">
+                <div className="px-4 pt-3 pb-2">
+                  <Text type="secondary" className="text-xs block">Formas de pagamento</Text>
+                </div>
+
+                {/* Primary */}
+                <div className="px-4 py-3 border-b border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <Text type="secondary" className="text-xs">Principal</Text>
+                    <Button
+                      type="link"
+                      size="small"
+                      className="!p-0"
+                      onClick={() => handleEditPayment('primary')}
+                    >
+                      Editar
+                    </Button>
+                  </div>
+                  <div className="flex items-center gap-2 mt-1">
+                    {isBoleto ? (
+                      <>
+                        <BarcodeOutlined className="text-xl text-orange-500" />
+                        <Text className="text-sm font-medium">Boleto bancário</Text>
+                      </>
+                    ) : primaryCard ? (
+                      <>
+                        <CardBrandIcon brand={primaryCard.brand} size={28} />
+                        <Text className="text-sm">
+                          <CardDisplay card={primaryCard} />
+                        </Text>
+                      </>
+                    ) : (
+                      <>
+                        <CreditCardOutlined className="text-gray-400" />
+                        <Text className="text-sm text-gray-400">Cartão não definido</Text>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                <Divider className="!my-0" />
+
+                {/* Alternative card */}
+                <div className="px-4 py-3">
+                  <div className="flex items-center justify-between">
+                    <span className="flex items-center gap-1">
+                      <Text type="secondary" className="text-xs">Alternativa</Text>
+                      <Tooltip title="O cartão alternativo da sua conta é usado automaticamente caso a cobrança no método principal falhe em qualquer contrato, evitando interrupções no seu acesso.">
+                        <QuestionCircleOutlined className="text-xs text-gray-400 cursor-help" />
+                      </Tooltip>
+                    </span>
+                    {alternativeCard ? (
+                      <Button
+                        type="link"
+                        size="small"
+                        className="!p-0"
+                        onClick={() => handleEditPayment('alternative')}
+                      >
+                        Editar
+                      </Button>
+                    ) : (
+                      <Button
+                        type="link"
+                        size="small"
+                        className="!p-0"
+                        onClick={handleAddAlternative}
+                      >
+                        Cadastrar
+                      </Button>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 mt-1">
+                    {alternativeCard ? (
+                      <>
+                        <CardBrandIcon brand={alternativeCard.brand} size={28} />
+                        <Text className="text-sm">
+                          <CardDisplay card={alternativeCard} />
+                        </Text>
+                      </>
+                    ) : (
+                      <>
+                        <CreditCardOutlined className="text-gray-400" />
+                        <Text className="text-sm text-gray-400">
+                          Nenhum cartão cadastrado
+                        </Text>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </Card>
+
+          </div>
+
+          {/* Row 2: Contract info + Payment history */}
+          <div className="flex flex-col md:grid md:grid-cols-2 md:items-start gap-5">
+            {/* Contract info */}
+            <Card size="small">
+              <Text type="secondary" className="text-xs block mb-3">
+                Informações do seu contrato
+              </Text>
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Text className="text-sm">Contrato: {detail.contrato}</Text>
+                  <Tag
+                    color={
+                      detail.status === 'Em dia'
+                        ? 'green'
+                        : detail.status === 'Suspenso'
+                          ? 'orange'
+                          : undefined
+                    }
+                    className="text-xs"
+                  >
+                    {detail.status}
+                  </Tag>
+                </div>
+                <Text className="text-sm">
+                  Tipo de frequência: {detail.tipoFrequencia}
+                </Text>
+                <Text className="text-sm">Frequência: {detail.frequencia}</Text>
+                <Text className="text-sm">
+                  Limite de cobranças: {detail.limiteCobrancas}
+                </Text>
+              </div>
+              <Title level={4} className="!mt-3 !mb-1">
+                {detail.valor}
+              </Title>
+              <Divider className="!my-3" />
+              <Text type="secondary" className="text-sm">
+                Renovação: {detail.renovacao}
+              </Text>
+            </Card>
+
+            {/* Payment history */}
+            <Collapse
+              ghost
+              items={[
+                {
+                  key: '1',
+                  label: 'Histórico de Pagamento',
+                  children: (() => {
+                    const items = paymentHistory[detail.contrato] || []
+                    if (!items.length) return <Text type="secondary" className="text-sm py-2">Nenhum pagamento registrado.</Text>
+                    const pending = items.filter((i) => i.status === 'Aguardando pagamento')
+                    const resolved = items.filter((i) => i.status !== 'Aguardando pagamento')
+                    return (
+                      <div className="flex flex-col gap-3">
+                        {pending.length > 0 && (
+                          <div className="flex flex-col gap-2">
+                            {pending.map((item, idx) => (
+                              <PaymentHistoryRow key={`p-${idx}`} item={item} />
+                            ))}
+                          </div>
+                        )}
+                        {pending.length > 0 && resolved.length > 0 && (
+                          <Divider className="!my-0" />
+                        )}
+                        {resolved.length > 0 && (
+                          <div className="flex flex-col gap-2">
+                            {resolved.map((item, idx) => (
+                              <PaymentHistoryRow key={`r-${idx}`} item={item} />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })(),
+                },
+              ]}
+              className="border border-gray-200 rounded-lg !bg-white"
+            />
+          </div>
+
+          {/* Cancel button on mobile - at the bottom */}
+          {isMobile && (
+            <>
+              <Divider className="!my-1" />
+              <Button danger icon={<CloseOutlined />}>
+                Cancelar Assinatura
+              </Button>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Change payment modal */}
+      <ChangePaymentModal
+        open={paymentModalOpen}
+        onClose={() => setPaymentModalOpen(false)}
+        target={paymentTarget}
+        currentCardId={currentCardIdForTarget}
+        disabledCardIds={paymentTarget === 'primary'
+          ? [alternativeCardId]
+          : Object.values(subscriptionDetails).map((d) => d.primaryCardId).filter(Boolean)
+        }
+        primaryCardId={detail.primaryCardId}
+        alternativeCardId={alternativeCardId ?? null}
+        allCards={savedCards}
+        onConfirm={handleConfirmPayment}
+      />
+    </div>
+  )
+}
