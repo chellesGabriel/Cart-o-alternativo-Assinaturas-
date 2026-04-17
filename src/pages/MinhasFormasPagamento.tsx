@@ -275,9 +275,6 @@ export default function MinhasFormasPagamento() {
   }
 
   const handleSetPrimaryAll = (card: SavedCard) => {
-    const allContracts = Object.values(subscriptionDetails)
-    const count = allContracts.length
-
     Modal.confirm({
       icon: null,
       centered: true,

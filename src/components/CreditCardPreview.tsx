@@ -135,7 +135,7 @@ export default function CreditCardPreview({
               <ChipIcon />
               <ContactlessIcon />
             </div>
-            <CardBrandIcon brand={brand} size={isMobile ? 40 : 48} noBg />
+            <CardBrandIcon brand={brand} size={isMobile ? 40 : 48} />
           </div>
 
           {/* Card number */}
@@ -254,7 +254,7 @@ export default function CreditCardPreview({
               <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.4)', maxWidth: isMobile ? 150 : 180, lineHeight: 1.4 }}>
                 Este cartão é de propriedade do emissor e deve ser devolvido quando solicitado.
               </div>
-              <CardBrandIcon brand={brand} size={isMobile ? 40 : 48} noBg />
+              <CardBrandIcon brand={brand} size={isMobile ? 40 : 48} />
             </div>
           </div>
         </div>

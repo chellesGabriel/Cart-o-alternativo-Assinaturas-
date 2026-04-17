@@ -451,7 +451,6 @@ const eduzzTheme: ThemeConfig = {
       primaryColor: '#ffffff',
       onlyIconSize: 16,
       linkHoverBg: 'rgba(0, 0, 0, 0)',
-      groupBorderColor: '#355ec4',
       ghostBg: 'rgba(0, 0, 0, 0)',
       defaultGhostColor: '#ffffff',
       defaultGhostBorderColor: '#ffffff',
