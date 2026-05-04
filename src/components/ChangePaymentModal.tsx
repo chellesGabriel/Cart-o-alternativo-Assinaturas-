@@ -263,8 +263,8 @@ export default function ChangePaymentModal({
       open={open}
       onCancel={handleClose}
       footer={null}
-      width={isMobile ? '100%' : 480}
-      style={isMobile ? { top: 0, maxWidth: '100vw', margin: 0, padding: 0 } : undefined}
+      width={isMobile ? 'calc(100vw - 32px)' : 480}
+      centered
       styles={isMobile ? { body: { maxHeight: '80vh', overflowY: 'auto' } } : undefined}
       destroyOnClose
     >
@@ -298,9 +298,10 @@ export default function ChangePaymentModal({
           >
             <Space direction="vertical" className="w-full" size="small">
               {(() => {
-                const primCard = allCards.find((c) => c.id === primaryCardId)
-                const altCard = allCards.find((c) => c.id === altCardId)
-                const otherCards = allCards.filter(
+                const availableCards = allCards.filter((c) => !c.disabled)
+                const primCard = availableCards.find((c) => c.id === primaryCardId)
+                const altCard = availableCards.find((c) => c.id === altCardId)
+                const otherCards = availableCards.filter(
                   (c) => c.id !== primaryCardId && c.id !== altCardId
                 )
                 const priorityCards = [primCard, altCard].filter(Boolean) as SavedCard[]

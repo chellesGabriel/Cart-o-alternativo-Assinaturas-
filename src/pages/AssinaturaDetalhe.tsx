@@ -106,7 +106,6 @@ export default function AssinaturaDetalhe() {
 
   const [paymentModalOpen, setPaymentModalOpen] = useState(false)
   const [paymentTarget, setPaymentTarget] = useState<'primary' | 'alternative'>('primary')
-  const [primaryCardIdOverride, setPrimaryCardIdOverride] = useState<string | null | undefined>(undefined)
   const [, setTick] = useState(0)
 
   const baseDetail = contrato ? subscriptionDetails[contrato] : null
@@ -132,17 +131,12 @@ export default function AssinaturaDetalhe() {
     )
   }
 
-  const detail = {
-    ...baseDetail,
-    primaryCardId: primaryCardIdOverride !== undefined ? (primaryCardIdOverride ?? '') : baseDetail.primaryCardId,
-    formaPagamento: primaryCardIdOverride !== undefined && primaryCardIdOverride
-      ? 'Cartão de crédito'
-      : baseDetail.formaPagamento,
-  }
+  const detail = baseDetail
 
   const alternativeCardId = accountAlternativeCardId
 
   const isBoleto = detail.formaPagamento === 'Boleto bancário'
+  const isPix = detail.formaPagamento === 'PIX'
   const primaryCard = savedCards.find((c) => c.id === detail.primaryCardId)
   const alternativeCard = alternativeCardId
     ? savedCards.find((c) => c.id === alternativeCardId)
@@ -163,13 +157,29 @@ export default function AssinaturaDetalhe() {
       ? detail.primaryCardId ?? null
       : alternativeCardId ?? null
 
-  const handleConfirmPayment = (cardId: string) => {
+  const handleConfirmPayment = (cardId: string, method?: string) => {
     if (paymentTarget === 'alternative') {
       setAccountAlternativeCardId(cardId)
-      setTick((t) => t + 1)
     } else if (paymentTarget === 'primary') {
-      setPrimaryCardIdOverride(cardId)
+      const card = savedCards.find((c) => c.id === cardId)
+      if (method === 'boleto') {
+        baseDetail.formaPagamento = 'Boleto bancário'
+        baseDetail.primaryCardId = ''
+        baseDetail.cardFinal = ''
+        baseDetail.cardBrand = 'Mastercard'
+      } else if (method === 'pix') {
+        baseDetail.formaPagamento = 'PIX'
+        baseDetail.primaryCardId = ''
+        baseDetail.cardFinal = ''
+        baseDetail.cardBrand = 'Mastercard'
+      } else if (card) {
+        baseDetail.primaryCardId = cardId
+        baseDetail.formaPagamento = 'Cartão de crédito'
+        baseDetail.cardFinal = card.last4
+        baseDetail.cardBrand = card.brand as typeof baseDetail.cardBrand
+      }
     }
+    setTick((t) => t + 1)
   }
 
   return (
@@ -240,19 +250,6 @@ export default function AssinaturaDetalhe() {
                 <Text className="text-sm">Nome: {detail.nome}</Text>
                 <Text className="text-sm break-all">E-mail: {detail.email}</Text>
                 <Text className="text-sm">Telefone: {detail.telefone}</Text>
-                <div className="flex items-center gap-1.5">
-                  <Text className="text-sm">Forma de pagamento:</Text>
-                  {primaryCard ? (
-                    <>
-                      <CardBrandIcon brand={primaryCard.brand} size={28} />
-                      <Text className="text-sm">{primaryCard.brand || 'Cartão'} •••• {primaryCard.last4}</Text>
-                    </>
-                  ) : detail.cardFinal ? (
-                    <Text className="text-sm">Cartão •••• {detail.cardFinal}</Text>
-                  ) : (
-                    <Text className="text-sm">{detail.formaPagamento}</Text>
-                  )}
-                </div>
               </div>
             </Card>
 
@@ -280,6 +277,11 @@ export default function AssinaturaDetalhe() {
                       <>
                         <BarcodeOutlined className="text-xl text-orange-500" />
                         <Text className="text-sm font-medium">Boleto bancário</Text>
+                      </>
+                    ) : isPix ? (
+                      <>
+                        <QrcodeOutlined className="text-xl text-green-600" />
+                        <Text className="text-sm font-medium">PIX</Text>
                       </>
                     ) : primaryCard ? (
                       <>
@@ -313,7 +315,7 @@ export default function AssinaturaDetalhe() {
                         type="link"
                         size="small"
                         className="!p-0"
-                        onClick={() => handleEditPayment('alternative')}
+                        onClick={() => navigate('/formas-pagamento')}
                       >
                         Editar
                       </Button>
@@ -392,11 +394,12 @@ export default function AssinaturaDetalhe() {
 
             {/* Payment history */}
             <Collapse
-              ghost
+              defaultActiveKey={['1']}
               items={[
                 {
                   key: '1',
                   label: 'Histórico de Pagamento',
+                  styles: { body: { borderTop: 'none' } },
                   children: (() => {
                     const items = paymentHistory[detail.contrato] || []
                     if (!items.length) return <Text type="secondary" className="text-sm py-2">Nenhum pagamento registrado.</Text>
@@ -426,7 +429,7 @@ export default function AssinaturaDetalhe() {
                   })(),
                 },
               ]}
-              className="border border-gray-200 rounded-lg !bg-white"
+              className="!border-[#f0f0f0] !rounded-lg !bg-white [&>.ant-collapse-item]:!border-[#f0f0f0] [&_[class*=collapse-panel]]:!border-t-0"
             />
           </div>
 

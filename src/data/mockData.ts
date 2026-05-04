@@ -15,6 +15,7 @@ export interface SavedCard {
   last4: string
   holderName: string
   expiry: string
+  disabled?: boolean
 }
 
 export interface SubscriptionDetail {
@@ -85,6 +86,14 @@ export const savedCards: SavedCard[] = [
     last4: '3804',
     holderName: 'GABRIEL R CHELLES',
     expiry: '12/28',
+  },
+  {
+    id: 'card-2',
+    brand: 'Elo',
+    last4: '4098',
+    holderName: 'GABRIEL R CHELLES',
+    expiry: '03/25',
+    disabled: true,
   },
 ]
 

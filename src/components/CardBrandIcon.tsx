@@ -7,6 +7,7 @@ import brandAmex from '../assets/brand-amex.svg'
 interface Props {
   brand: string
   size?: number
+  opacity?: number
 }
 
 const brandAssets: Record<string, { src: string; bg: string }> = {
@@ -16,7 +17,7 @@ const brandAssets: Record<string, { src: string; bg: string }> = {
   Amex: { src: brandAmex, bg: '#1f72cd' },
 }
 
-export default function CardBrandIcon({ brand, size = 35 }: Props) {
+export default function CardBrandIcon({ brand, size = 35, opacity }: Props) {
   const h = Math.round(size * (24 / 35))
   const asset = brandAssets[brand]
 
@@ -24,7 +25,7 @@ export default function CardBrandIcon({ brand, size = 35 }: Props) {
     return (
       <div
         className="relative border border-[#e4e4e7] rounded flex-shrink-0 overflow-hidden flex items-center justify-center"
-        style={{ width: size, height: h, backgroundColor: asset.bg }}
+        style={{ width: size, height: h, backgroundColor: asset.bg, opacity }}
       >
         <img
           src={asset.src}
@@ -39,7 +40,7 @@ export default function CardBrandIcon({ brand, size = 35 }: Props) {
   return (
     <div
       className="relative border border-[#e4e4e7] rounded flex-shrink-0 overflow-hidden flex items-center justify-center bg-white"
-      style={{ width: size, height: h }}
+      style={{ width: size, height: h, opacity }}
     >
       <CreditCardOutlined className="text-gray-400" style={{ fontSize: Math.round(h * 0.55) }} />
     </div>

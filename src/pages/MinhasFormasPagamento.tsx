@@ -233,8 +233,9 @@ export default function MinhasFormasPagamento() {
       Modal.warning({
         icon: null,
         centered: true,
-        width: 520,
+        width: isMobile ? 'calc(100vw - 32px)' : 480,
         okText: 'Entendi',
+        okButtonProps: { size: 'large', style: { backgroundColor: '#0d2772', borderColor: '#0d2772' } },
         content: (
           <div className="flex flex-col items-center text-center gap-4 py-2">
             <img src={infoCircleIcon} alt="" className="w-16 h-16" />
@@ -252,7 +253,7 @@ export default function MinhasFormasPagamento() {
     Modal.confirm({
       icon: null,
       centered: true,
-      width: 520,
+      width: isMobile ? 'calc(100vw - 32px)' : 480,
       content: (
         <div className="flex flex-col items-center text-center gap-4 py-2">
           <img src={infoCircleIcon} alt="" className="w-16 h-16" />
@@ -264,6 +265,8 @@ export default function MinhasFormasPagamento() {
       ),
       okText: 'Excluir',
       okType: 'danger',
+      okButtonProps: { size: 'large' },
+      cancelButtonProps: { size: 'large' },
       cancelText: 'Cancelar',
       onOk: () => {
         const idx = savedCards.findIndex((c) => c.id === card.id)
@@ -278,7 +281,9 @@ export default function MinhasFormasPagamento() {
     Modal.confirm({
       icon: null,
       centered: true,
-      width: 520,
+      width: isMobile ? 'calc(100vw - 32px)' : 480,
+      okButtonProps: { size: 'large', style: { backgroundColor: '#0d2772', borderColor: '#0d2772' } },
+      cancelButtonProps: { size: 'large' },
       content: (
         <div className="flex flex-col items-center text-center gap-4 py-2">
           <img src={infoCircleIcon} alt="" className="w-16 h-16" />
@@ -311,8 +316,9 @@ export default function MinhasFormasPagamento() {
       Modal.warning({
         icon: null,
         centered: true,
-        width: 520,
+        width: isMobile ? 'calc(100vw - 32px)' : 480,
         okText: 'Entendi',
+        okButtonProps: { size: 'large', style: { backgroundColor: '#0d2772', borderColor: '#0d2772' } },
         content: (
           <div className="flex flex-col items-center text-center gap-4 py-2">
             <img src={infoCircleIcon} alt="" className="w-16 h-16" />
@@ -332,7 +338,9 @@ export default function MinhasFormasPagamento() {
     Modal.confirm({
       icon: null,
       centered: true,
-      width: 520,
+      width: isMobile ? 'calc(100vw - 32px)' : 480,
+      okButtonProps: { size: 'large', style: { backgroundColor: '#0d2772', borderColor: '#0d2772' } },
+      cancelButtonProps: { size: 'large' },
       content: (
         <div className="flex flex-col items-center text-center gap-4 py-2">
           <img src={infoCircleIcon} alt="" className="w-16 h-16" />
@@ -428,6 +436,18 @@ export default function MinhasFormasPagamento() {
     const isAlreadyAlternative = accountAlternativeCardId === card.id
     const isPrimaryInAny = allContracts.some((d) => d.primaryCardId === card.id)
 
+    if (card.disabled) {
+      return [
+        {
+          key: 'delete',
+          icon: <DeleteOutlined />,
+          label: 'Excluir cartão',
+          danger: true,
+          onClick: () => handleDelete(card),
+        },
+      ]
+    }
+
     return [
       {
         key: 'primary',
@@ -467,16 +487,22 @@ export default function MinhasFormasPagamento() {
         {/* Card header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
-            <CardBrandIcon brand={card.brand} size={36} />
+            <CardBrandIcon brand={card.brand} size={36} opacity={card.disabled ? 0.3 : undefined} />
             <div className="min-w-0">
-              <Text strong className="text-base block truncate">
+              <Text strong className={`text-base block truncate ${card.disabled ? 'opacity-30' : ''}`}>
                 {card.brand || 'Cartão'} •••• {card.last4}
               </Text>
-              <Text type="secondary" className="!text-sm">
-                {inUse
-                  ? `Em uso em ${usages.length} assinatura${usages.length > 1 ? 's' : ''}`
-                  : 'Não vinculado a nenhuma cobrança'}
-              </Text>
+              {card.disabled ? (
+                <Text className="!text-xs !text-[#ff4d4f]">
+                  Este cartão não pode ser usado no momento
+                </Text>
+              ) : (
+                <Text type="secondary" className="!text-sm">
+                  {inUse
+                    ? `Em uso em ${usages.length} assinatura${usages.length > 1 ? 's' : ''}`
+                    : 'Não vinculado a nenhuma cobrança'}
+                </Text>
+              )}
             </div>
           </div>
           <Dropdown
@@ -488,7 +514,7 @@ export default function MinhasFormasPagamento() {
         </div>
 
         {/* Expanded: usage cards */}
-        {isExpanded && inUse && (
+        {isExpanded && inUse && !card.disabled && (
           <>
             <Divider className="!my-0" />
             {usages.map((usage) => (
@@ -520,7 +546,7 @@ export default function MinhasFormasPagamento() {
         )}
 
         {/* Accordion toggle */}
-        {inUse && (
+        {inUse && !card.disabled && (
           <>
             {!isExpanded && <Divider className="!my-0" />}
             <div
@@ -552,9 +578,9 @@ export default function MinhasFormasPagamento() {
       <Card key={card.id} size="small">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-4 min-w-0">
-            <CardBrandIcon brand={card.brand} size={48} />
+            <CardBrandIcon brand={card.brand} size={48} opacity={card.disabled ? 0.3 : undefined} />
             <div className="min-w-0">
-              <div className="flex items-center gap-2">
+              <div className={`flex items-center gap-2 ${card.disabled ? 'opacity-30' : ''}`}>
                 <Text strong className="text-base block truncate">
                   {card.brand || 'Cartão'} •••• {card.last4}
                 </Text>
@@ -563,7 +589,11 @@ export default function MinhasFormasPagamento() {
                 )}
               </div>
               <div className="mt-1">
-                {inUse ? (
+                {card.disabled ? (
+                  <Text className="!text-xs !text-[#ff4d4f]">
+                    Este cartão não pode ser usado no momento
+                  </Text>
+                ) : inUse ? (
                   <Text type="secondary" className="!text-xs">
                     Em uso em {usages.length} assinatura{usages.length > 1 ? 's' : ''}
                   </Text>
@@ -576,7 +606,7 @@ export default function MinhasFormasPagamento() {
             </div>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
-            {inUse && (
+            {inUse && !card.disabled && (
               <Button
                 type="link"
                 size="small"
@@ -595,7 +625,7 @@ export default function MinhasFormasPagamento() {
           </div>
         </div>
 
-        {isExpanded && (
+        {isExpanded && !card.disabled && (
           <div className="mt-3 pt-3 border-t border-gray-100">
             <Table
               columns={usageColumns}
@@ -670,12 +700,12 @@ export default function MinhasFormasPagamento() {
                 {/* Banner: cadastrar cartão alternativo */}
                 {!accountAlternativeCardId && (
                   <Card
-                    className="!border-blue-200 !bg-blue-50/60"
+                    className="!bg-[#fffbe6] !border-[#ffe58f]"
                     size="small"
                   >
                     <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                       <div className="flex gap-3 items-start">
-                        <SafetyOutlined className="text-2xl text-blue-500 mt-0.5 flex-shrink-0" />
+                        <SafetyOutlined className="text-2xl text-[#faad14] mt-0.5 flex-shrink-0" />
                         <div>
                           <Text strong className="block text-sm md:text-base">
                             Proteja suas assinaturas com um cartão alternativo
@@ -724,8 +754,8 @@ export default function MinhasFormasPagamento() {
         open={addModalOpen}
         onCancel={handleCloseAddModal}
         footer={null}
-        width={isMobile ? '100%' : 480}
-        style={isMobile ? { top: 0, maxWidth: '100vw', margin: 0, padding: 0 } : undefined}
+        width={isMobile ? 'calc(100vw - 32px)' : 480}
+        centered
         styles={isMobile ? { body: { maxHeight: '80vh', overflowY: 'auto' } } : undefined}
         destroyOnClose
       >
