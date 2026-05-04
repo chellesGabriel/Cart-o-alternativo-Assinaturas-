@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import CardBrandIcon from './CardBrandIcon'
 import { useIsMobile } from '../hooks/useIsMobile'
 
 interface Props {
@@ -36,6 +35,40 @@ function ChipIcon() {
       <line x1="24" y1="0" x2="24" y2="28" stroke="#c09940" strokeWidth="0.8" />
     </svg>
   )
+}
+
+function CardBrandPreview({ brand, size = 48 }: { brand: string; size?: number }) {
+  const h = Math.round(size * 0.65)
+  if (brand === 'Mastercard') {
+    return (
+      <svg width={size} height={h} viewBox="0 0 48 32" fill="none">
+        <circle cx="18" cy="16" r="12" fill="#eb001b" opacity="0.9" />
+        <circle cx="30" cy="16" r="12" fill="#f79e1b" opacity="0.9" />
+      </svg>
+    )
+  }
+  if (brand === 'Visa') {
+    return (
+      <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: size * 0.4, color: 'white', letterSpacing: 1 }}>
+        VISA
+      </span>
+    )
+  }
+  if (brand === 'Amex') {
+    return (
+      <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: size * 0.35, color: 'white', letterSpacing: 1 }}>
+        AMEX
+      </span>
+    )
+  }
+  if (brand === 'Elo') {
+    return (
+      <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: size * 0.4, color: 'white', letterSpacing: 1 }}>
+        elo
+      </span>
+    )
+  }
+  return null
 }
 
 function ContactlessIcon() {
@@ -135,7 +168,7 @@ export default function CreditCardPreview({
               <ChipIcon />
               <ContactlessIcon />
             </div>
-            <CardBrandIcon brand={brand} size={isMobile ? 40 : 48} />
+            <CardBrandPreview brand={brand} size={isMobile ? 40 : 48} />
           </div>
 
           {/* Card number */}
@@ -254,7 +287,7 @@ export default function CreditCardPreview({
               <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.4)', maxWidth: isMobile ? 150 : 180, lineHeight: 1.4 }}>
                 Este cartão é de propriedade do emissor e deve ser devolvido quando solicitado.
               </div>
-              <CardBrandIcon brand={brand} size={isMobile ? 40 : 48} />
+              <CardBrandPreview brand={brand} size={isMobile ? 40 : 48} />
             </div>
           </div>
         </div>

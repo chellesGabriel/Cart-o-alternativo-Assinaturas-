@@ -22,6 +22,7 @@ export interface SubscriptionDetail {
   id: string
   produto: string
   produtor: string
+  emailSuporte: string
   imagemProduto: string
   nome: string
   email: string
@@ -102,6 +103,7 @@ export const subscriptionDetails: Record<string, SubscriptionDetail> = {
     id: '3938952',
     produto: 'Curso University - 5x 30 dias',
     produtor: 'Jefferson Campos',
+    emailSuporte: 'suporte@cursouniversity.com',
     imagemProduto: 'https://placehold.co/80x80/f5f5f5/999?text=Curso',
     nome: 'Gabriel Rodrigues Chelles',
     email: 'gabrielchelles@email.com',
@@ -122,6 +124,7 @@ export const subscriptionDetails: Record<string, SubscriptionDetail> = {
     id: '3941200',
     produto: 'Marketing Pro - Mensal',
     produtor: 'Ana Costa',
+    emailSuporte: 'contato@marketingpro.com.br',
     imagemProduto: 'https://placehold.co/80x80/f5f5f5/999?text=Mkt',
     nome: 'Gabriel Rodrigues Chelles',
     email: 'gabrielchelles@email.com',
@@ -142,6 +145,7 @@ export const subscriptionDetails: Record<string, SubscriptionDetail> = {
     id: '3942100',
     produto: 'Design Mastery',
     produtor: 'Lucas Mendes',
+    emailSuporte: 'ajuda@designmastery.com',
     imagemProduto: 'https://placehold.co/80x80/f5f5f5/999?text=Design',
     nome: 'Gabriel Rodrigues Chelles',
     email: 'gabrielchelles@email.com',

@@ -234,8 +234,9 @@ export default function MinhasFormasPagamento() {
         icon: null,
         centered: true,
         width: isMobile ? 'calc(100vw - 32px)' : 480,
+        className: '[&_[class*=modal-container]]:!rounded',
         okText: 'Entendi',
-        okButtonProps: { size: 'large', style: { backgroundColor: '#0d2772', borderColor: '#0d2772' } },
+        okButtonProps: { size: 'large', style: { backgroundColor: '#0d2772', borderColor: '#0d2772', borderRadius: 4 } },
         content: (
           <div className="flex flex-col items-center text-center gap-4 py-2">
             <img src={infoCircleIcon} alt="" className="w-16 h-16" />
@@ -254,6 +255,7 @@ export default function MinhasFormasPagamento() {
       icon: null,
       centered: true,
       width: isMobile ? 'calc(100vw - 32px)' : 480,
+      className: '[&_[class*=modal-container]]:!rounded',
       content: (
         <div className="flex flex-col items-center text-center gap-4 py-2">
           <img src={infoCircleIcon} alt="" className="w-16 h-16" />
@@ -265,8 +267,8 @@ export default function MinhasFormasPagamento() {
       ),
       okText: 'Excluir',
       okType: 'danger',
-      okButtonProps: { size: 'large' },
-      cancelButtonProps: { size: 'large' },
+      okButtonProps: { size: 'large', style: { borderRadius: 4 } },
+      cancelButtonProps: { size: 'large', style: { borderRadius: 4 } },
       cancelText: 'Cancelar',
       onOk: () => {
         const idx = savedCards.findIndex((c) => c.id === card.id)
@@ -282,8 +284,9 @@ export default function MinhasFormasPagamento() {
       icon: null,
       centered: true,
       width: isMobile ? 'calc(100vw - 32px)' : 480,
-      okButtonProps: { size: 'large', style: { backgroundColor: '#0d2772', borderColor: '#0d2772' } },
-      cancelButtonProps: { size: 'large' },
+      className: '[&_[class*=modal-container]]:!rounded',
+      okButtonProps: { size: 'large', style: { backgroundColor: '#0d2772', borderColor: '#0d2772', borderRadius: 4 } },
+      cancelButtonProps: { size: 'large', style: { borderRadius: 4 } },
       content: (
         <div className="flex flex-col items-center text-center gap-4 py-2">
           <img src={infoCircleIcon} alt="" className="w-16 h-16" />
@@ -317,8 +320,9 @@ export default function MinhasFormasPagamento() {
         icon: null,
         centered: true,
         width: isMobile ? 'calc(100vw - 32px)' : 480,
+        className: '[&_[class*=modal-container]]:!rounded',
         okText: 'Entendi',
-        okButtonProps: { size: 'large', style: { backgroundColor: '#0d2772', borderColor: '#0d2772' } },
+        okButtonProps: { size: 'large', style: { backgroundColor: '#0d2772', borderColor: '#0d2772', borderRadius: 4 } },
         content: (
           <div className="flex flex-col items-center text-center gap-4 py-2">
             <img src={infoCircleIcon} alt="" className="w-16 h-16" />
@@ -339,8 +343,9 @@ export default function MinhasFormasPagamento() {
       icon: null,
       centered: true,
       width: isMobile ? 'calc(100vw - 32px)' : 480,
-      okButtonProps: { size: 'large', style: { backgroundColor: '#0d2772', borderColor: '#0d2772' } },
-      cancelButtonProps: { size: 'large' },
+      className: '[&_[class*=modal-container]]:!rounded',
+      okButtonProps: { size: 'large', style: { backgroundColor: '#0d2772', borderColor: '#0d2772', borderRadius: 4 } },
+      cancelButtonProps: { size: 'large', style: { borderRadius: 4 } },
       content: (
         <div className="flex flex-col items-center text-center gap-4 py-2">
           <img src={infoCircleIcon} alt="" className="w-16 h-16" />
@@ -689,13 +694,17 @@ export default function MinhasFormasPagamento() {
           </Card>
         ) : (
           (() => {
-            const cardsInUse = cards.filter((c) => getCardUsage(c.id).length > 0)
-            const cardsNotInUse = cards.filter((c) => getCardUsage(c.id).length === 0)
+            const primaryCards = cards.filter((c) => getCardUsage(c.id).length > 0 && c.id !== accountAlternativeCardId)
+            const alternativeCards = cards.filter((c) => c.id === accountAlternativeCardId)
+            const cardsNotInUse = cards.filter((c) => getCardUsage(c.id).length === 0 && c.id !== accountAlternativeCardId)
 
             return (
               <div className="flex flex-col gap-3">
-                {/* Cartões em uso */}
-                {cardsInUse.map((card) => renderCardItem(card))}
+                {/* Cartões principais */}
+                {primaryCards.map((card) => renderCardItem(card))}
+
+                {/* Cartão alternativo da conta */}
+                {alternativeCards.map((card) => renderCardItem(card))}
 
                 {/* Banner: cadastrar cartão alternativo */}
                 {!accountAlternativeCardId && (

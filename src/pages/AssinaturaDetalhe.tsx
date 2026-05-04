@@ -232,8 +232,11 @@ export default function AssinaturaDetalhe() {
                 <Text strong className="block text-base truncate">
                   {detail.produto}
                 </Text>
-                <Text type="secondary" className="text-sm">
+                <Text type="secondary" className="text-sm block">
                   Produtor: <Text strong>{detail.produtor}</Text>
+                </Text>
+                <Text type="secondary" className="text-sm block break-all">
+                  Suporte: <Text strong>{detail.emailSuporte}</Text>
                 </Text>
               </div>
             </div>
