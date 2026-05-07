@@ -938,13 +938,13 @@ export default function MinhasFormasPagamento() {
               </Form.Item>
             </Form>
 
-            <div>
-              <div className="py-1">
+            <div className="[&_.ant-checkbox-inner]:!w-5 [&_.ant-checkbox-inner]:!h-5 md:[&_.ant-checkbox-inner]:!w-4 md:[&_.ant-checkbox-inner]:!h-4 [&_.ant-radio-inner]:!w-5 [&_.ant-radio-inner]:!h-5 md:[&_.ant-radio-inner]:!w-4 md:[&_.ant-radio-inner]:!h-4">
+              <div className="py-2">
                 <Checkbox
                   checked={bulkEnabled}
                   onChange={(e) => setBulkEnabled(e.target.checked)}
                 >
-                  <Text className="!text-sm md:!text-sm !text-base">
+                  <Text className="!text-base md:!text-sm">
                     Vincular a todos os contratos
                   </Text>
                 </Checkbox>
@@ -953,22 +953,22 @@ export default function MinhasFormasPagamento() {
                 <Radio.Group
                   value={cardRole}
                   onChange={(e) => setCardRole(e.target.value)}
-                  className="ml-6 mt-3"
+                  className="ml-7 mt-2"
                 >
-                  <div className="flex flex-col gap-3 md:gap-1">
+                  <div className="flex flex-col gap-5 md:gap-1">
                     <Radio value="primary">
                       <span className="inline-flex items-center gap-2 md:gap-1">
-                        <Text className="!text-sm">Como forma de pagamento principal</Text>
+                        <Text className="!text-base md:!text-sm">Como forma de pagamento principal</Text>
                         <Tooltip title="Todas as cobranças futuras dos seus contratos serão realizadas neste cartão.">
-                          <QuestionCircleOutlined className="text-base md:text-xs text-gray-400 cursor-help" />
+                          <QuestionCircleOutlined className="text-lg md:text-xs text-gray-400 cursor-help" />
                         </Tooltip>
                       </span>
                     </Radio>
                     <Radio value="alternative">
                       <span className="inline-flex items-center gap-2 md:gap-1">
-                        <Text className="!text-sm">Como cartão alternativo da conta</Text>
+                        <Text className="!text-base md:!text-sm">Como cartão alternativo da conta</Text>
                         <Tooltip title="Este cartão será usado automaticamente caso a cobrança no método principal falhe em qualquer contrato, evitando interrupções no seu acesso.">
-                          <QuestionCircleOutlined className="text-base md:text-xs text-gray-400 cursor-help" />
+                          <QuestionCircleOutlined className="text-lg md:text-xs text-gray-400 cursor-help" />
                         </Tooltip>
                       </span>
                     </Radio>
