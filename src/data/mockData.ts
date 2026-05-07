@@ -23,6 +23,7 @@ export interface SubscriptionDetail {
   produto: string
   produtor: string
   emailSuporte: string
+  emailProdutor?: string
   imagemProduto: string
   nome: string
   email: string
@@ -32,12 +33,14 @@ export interface SubscriptionDetail {
   cardBrand: 'Mastercard' | 'Visa' | 'Elo'
   primaryCardId: string
   contrato: string
+  inicio: string
   status: 'Em dia' | 'Suspenso' | 'Cancelado'
   tipoFrequencia: string
   frequencia: string
   limiteCobrancas: string
   valor: string
   renovacao: string
+  canceladoEm?: string
 }
 
 // Cartão alternativo da conta — vinculado automaticamente a todos os contratos
@@ -78,6 +81,26 @@ export const subscriptions: Subscription[] = [
     proxVencimento: '01/05/2026',
     valor: 'R$ 150,00',
   },
+  {
+    contrato: '3943000',
+    status: 'Cancelado',
+    inicio: '02/05/2026',
+    produto: 'Inglês Fluente - Intensivo (2510300)',
+    produtoId: '2510300',
+    cobranca: '1 / ∞',
+    proxVencimento: '-',
+    valor: 'R$ 497,00',
+  },
+  {
+    contrato: '3943100',
+    status: 'Cancelado',
+    inicio: '15/03/2026',
+    produto: 'Finanças Pessoais PRO (2510400)',
+    produtoId: '2510400',
+    cobranca: '1 / ∞',
+    proxVencimento: '-',
+    valor: 'R$ 89,90',
+  },
 ]
 
 export const savedCards: SavedCard[] = [
@@ -96,7 +119,23 @@ export const savedCards: SavedCard[] = [
     expiry: '03/25',
     disabled: true,
   },
+  {
+    id: 'card-3',
+    brand: 'Visa',
+    last4: '7712',
+    holderName: 'GABRIEL R CHELLES',
+    expiry: '09/29',
+  },
+  {
+    id: 'card-4',
+    brand: 'Amex',
+    last4: '1456',
+    holderName: 'GABRIEL R CHELLES',
+    expiry: '06/27',
+  },
 ]
+
+import produtoCursoImg from '../assets/produto-curso.png'
 
 export const subscriptionDetails: Record<string, SubscriptionDetail> = {
   '3938952': {
@@ -104,7 +143,8 @@ export const subscriptionDetails: Record<string, SubscriptionDetail> = {
     produto: 'Curso University - 5x 30 dias',
     produtor: 'Jefferson Campos',
     emailSuporte: 'suporte@cursouniversity.com',
-    imagemProduto: 'https://placehold.co/80x80/f5f5f5/999?text=Curso',
+    emailProdutor: 'jeffCampos@email.com',
+    imagemProduto: produtoCursoImg,
     nome: 'Gabriel Rodrigues Chelles',
     email: 'gabrielchelles@email.com',
     telefone: '11 (9) 1122 - 3366',
@@ -113,6 +153,7 @@ export const subscriptionDetails: Record<string, SubscriptionDetail> = {
     cardBrand: 'Mastercard',
     primaryCardId: 'card-1',
     contrato: '3938952',
+    inicio: '04/03/2026',
     status: 'Suspenso',
     tipoFrequencia: 'Mensal',
     frequencia: 'a cada 1 mês(es)',
@@ -125,6 +166,7 @@ export const subscriptionDetails: Record<string, SubscriptionDetail> = {
     produto: 'Marketing Pro - Mensal',
     produtor: 'Ana Costa',
     emailSuporte: 'contato@marketingpro.com.br',
+    emailProdutor: 'ana@marketingpro.com.br',
     imagemProduto: 'https://placehold.co/80x80/f5f5f5/999?text=Mkt',
     nome: 'Gabriel Rodrigues Chelles',
     email: 'gabrielchelles@email.com',
@@ -134,6 +176,7 @@ export const subscriptionDetails: Record<string, SubscriptionDetail> = {
     cardBrand: 'Mastercard',
     primaryCardId: '',
     contrato: '3941200',
+    inicio: '10/03/2026',
     status: 'Em dia',
     tipoFrequencia: 'Mensal',
     frequencia: 'a cada 1 mês(es)',
@@ -146,6 +189,7 @@ export const subscriptionDetails: Record<string, SubscriptionDetail> = {
     produto: 'Design Mastery',
     produtor: 'Lucas Mendes',
     emailSuporte: 'ajuda@designmastery.com',
+    emailProdutor: 'lucas@designmastery.com',
     imagemProduto: 'https://placehold.co/80x80/f5f5f5/999?text=Design',
     nome: 'Gabriel Rodrigues Chelles',
     email: 'gabrielchelles@email.com',
@@ -155,12 +199,61 @@ export const subscriptionDetails: Record<string, SubscriptionDetail> = {
     cardBrand: 'Mastercard',
     primaryCardId: '',
     contrato: '3942100',
+    inicio: '01/02/2026',
     status: 'Em dia',
     tipoFrequencia: 'Mensal',
     frequencia: 'a cada 1 mês(es)',
     limiteCobrancas: '3 / 12',
     valor: 'R$ 150,00',
     renovacao: 'Cobrado no dia 01/05/2026',
+  },
+  '3943000': {
+    id: '3943000',
+    produto: 'Inglês Fluente - Intensivo',
+    produtor: 'Marcos Silva',
+    emailSuporte: 'suporte@inglesfluente.com',
+    emailProdutor: 'marcos@inglesfluente.com',
+    imagemProduto: 'https://placehold.co/80x80/f5f5f5/999?text=Inglês',
+    nome: 'Gabriel Rodrigues Chelles',
+    email: 'gabrielchelles@email.com',
+    telefone: '11 (9) 1122 - 3366',
+    formaPagamento: 'Cartão de crédito',
+    cardFinal: '3804',
+    cardBrand: 'Mastercard',
+    primaryCardId: 'card-1',
+    contrato: '3943000',
+    inicio: '02/05/2026',
+    status: 'Cancelado',
+    tipoFrequencia: 'Mensal',
+    frequencia: 'a cada 1 mês(es)',
+    limiteCobrancas: '1 / ∞',
+    valor: 'R$ 497,00',
+    renovacao: '-',
+    canceladoEm: '04/05/2026 - 15:19',
+  },
+  '3943100': {
+    id: '3943100',
+    produto: 'Finanças Pessoais PRO',
+    produtor: 'Carla Oliveira',
+    emailSuporte: 'ajuda@financaspro.com',
+    emailProdutor: 'carla@financaspro.com',
+    imagemProduto: 'https://placehold.co/80x80/f5f5f5/999?text=Fin',
+    nome: 'Gabriel Rodrigues Chelles',
+    email: 'gabrielchelles@email.com',
+    telefone: '11 (9) 1122 - 3366',
+    formaPagamento: 'Cartão de crédito',
+    cardFinal: '3804',
+    cardBrand: 'Mastercard',
+    primaryCardId: 'card-1',
+    contrato: '3943100',
+    inicio: '15/03/2026',
+    status: 'Cancelado',
+    tipoFrequencia: 'Mensal',
+    frequencia: 'a cada 1 mês(es)',
+    limiteCobrancas: '1 / ∞',
+    valor: 'R$ 89,90',
+    renovacao: '-',
+    canceladoEm: '20/04/2026 - 10:30',
   },
 }
 

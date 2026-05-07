@@ -8,8 +8,10 @@ import {
   ArrowLeftOutlined,
   HomeOutlined,
   SyncOutlined,
+  ReloadOutlined,
   DownloadOutlined,
   QrcodeOutlined,
+  CheckCircleOutlined,
 } from '@ant-design/icons'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import {
@@ -209,10 +211,17 @@ export default function AssinaturaDetalhe() {
           <Title level={3} className="!mb-0 !text-xl md:!text-2xl" style={{ color: 'rgba(0,0,0,0.85)' }}>
             Assinatura {detail.contrato}
           </Title>
-          {!isMobile && (
-            <Button danger icon={<CloseOutlined />}>
-              Cancelar Assinatura
-            </Button>
+          {!isMobile && detail.status !== 'Cancelado' && (
+            <div className="flex items-center gap-3">
+              {detail.status === 'Suspenso' && (
+                <Button icon={<ReloadOutlined />} type="primary" onClick={() => navigate(`/assinaturas/${contrato}/reativacao`)}>
+                  Reativar minha assinatura
+                </Button>
+              )}
+              <Button danger icon={<CloseOutlined />} onClick={() => navigate(`/assinaturas/${contrato}/suspensao`)}>
+                Cancelar Assinatura
+              </Button>
+            </div>
           )}
         </div>
 
@@ -371,7 +380,9 @@ export default function AssinaturaDetalhe() {
                         ? 'green'
                         : detail.status === 'Suspenso'
                           ? 'orange'
-                          : undefined
+                          : detail.status === 'Cancelado'
+                            ? 'default'
+                            : undefined
                     }
                     className="text-xs"
                   >
@@ -387,11 +398,21 @@ export default function AssinaturaDetalhe() {
                 </Text>
               </div>
               <Title level={4} className="!mt-3 !mb-1">
-                {detail.valor}
+                {detail.valor}{detail.status !== 'Cancelado' ? '' : ' /mês'}
               </Title>
+              {detail.status === 'Cancelado' && (
+                <>
+                  <Text className="text-sm block mt-1">
+                    Você terá acesso ao conteúdo até: {(() => {
+                      const m = detail.renovacao.match(/(\d{2})\/(\d{2})\/(\d{4})/)
+                      return m ? `${m[1]}/${m[2]}/${m[3]}` : '-'
+                    })()}
+                  </Text>
+                </>
+              )}
               <Divider className="!my-3" />
               <Text type="secondary" className="text-sm">
-                Renovação: {detail.renovacao}
+                Renovação: {detail.status === 'Cancelado' ? '-' : detail.renovacao}
               </Text>
             </Card>
 
@@ -437,14 +458,58 @@ export default function AssinaturaDetalhe() {
           </div>
 
           {/* Cancel button on mobile - at the bottom */}
-          {isMobile && (
+          {isMobile && detail.status !== 'Cancelado' && (
             <>
               <Divider className="!my-1" />
-              <Button danger icon={<CloseOutlined />}>
-                Cancelar Assinatura
-              </Button>
+              <div className="flex flex-col gap-3">
+                {detail.status === 'Suspenso' && (
+                  <Button icon={<ReloadOutlined />} type="primary" block onClick={() => navigate(`/assinaturas/${contrato}/reativacao`)}>
+                    Reativar minha assinatura
+                  </Button>
+                )}
+                <Button danger icon={<CloseOutlined />} onClick={() => navigate(`/assinaturas/${contrato}/suspensao`)} block>
+                  Cancelar Assinatura
+                </Button>
+              </div>
             </>
           )}
+
+          {/* Reembolso section - only when cancelled */}
+          {detail.status === 'Cancelado' && (() => {
+            const inicioMatch = detail.inicio.match(/(\d{2})\/(\d{2})\/(\d{4})/)
+            const inicioDate = inicioMatch
+              ? new Date(+inicioMatch[3], +inicioMatch[2] - 1, +inicioMatch[1])
+              : new Date(0)
+            const now = new Date()
+            const diffDays = Math.floor((now.getTime() - inicioDate.getTime()) / (1000 * 60 * 60 * 24))
+            const dentroDosPrazos = diffDays <= 7
+
+            return (
+              <Card size="small">
+                <Text type="secondary" className="text-xs block mb-3">
+                  Reembolso
+                </Text>
+                {dentroDosPrazos ? (
+                  <div className="flex items-start gap-2">
+                    <CheckCircleOutlined className="text-[#52c41a] mt-0.5" />
+                    <Text className="text-sm">
+                      Seu reembolso foi solicitado - {detail.canceladoEm || '-'}
+                    </Text>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-3">
+                    <Text className="text-sm">
+                      O prazo para solicitar o reembolso é de até 7 dias após a compra. Para solicitar o reembolso, por gentileza, entre em contato diretamente com o produtor.
+                    </Text>
+                    <div className="flex flex-col gap-0.5">
+                      <Text className="text-sm">Nome: {detail.produtor}</Text>
+                      <Text className="text-sm">E-mail: {detail.emailProdutor || detail.emailSuporte}</Text>
+                    </div>
+                  </div>
+                )}
+              </Card>
+            )
+          })()}
         </div>
       </div>
 

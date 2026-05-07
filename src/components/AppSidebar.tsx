@@ -47,7 +47,7 @@ const routeMap: Record<string, string> = {
 }
 
 function getSelectedKey(pathname: string): string {
-  if (pathname.startsWith('/assinaturas')) return 'assinaturas'
+  if (pathname === '/assinaturas') return 'assinaturas'
   if (pathname === '/formas-pagamento') return 'meios-pagamento'
   return ''
 }

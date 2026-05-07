@@ -6,6 +6,7 @@ import {
   MenuOutlined,
 } from '@ant-design/icons'
 import eduzzContaLogo from '../assets/eduzz-conta-logo.png'
+import mobileTopbarIcon from '../assets/mobile-topbar-icon.svg'
 
 const { Text } = Typography
 
@@ -19,13 +20,16 @@ export default function AppHeader({ onMenuClick, isMobile }: Props) {
     <header className="h-16 bg-white border-b border-[#f0f0f0] flex items-center px-4 md:px-8 justify-between sticky top-0 z-50">
       {/* Left */}
       <div className="flex items-center gap-4 min-w-0">
-        {isMobile && (
-          <MenuOutlined
-            className="text-xl text-gray-600 flex-shrink-0 cursor-pointer"
+        {isMobile ? (
+          <img
+            src={mobileTopbarIcon}
+            alt="Eduzz"
+            className="h-10 w-auto flex-shrink-0 cursor-pointer"
             onClick={onMenuClick}
           />
+        ) : (
+          <img src={eduzzContaLogo} alt="Eduzz Conta" className="h-8 flex-shrink-0" />
         )}
-        <img src={eduzzContaLogo} alt="Eduzz Conta" className="h-8 flex-shrink-0" />
       </div>
 
       {/* Center - Search */}
