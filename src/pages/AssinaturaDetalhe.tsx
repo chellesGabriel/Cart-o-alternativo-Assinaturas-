@@ -349,6 +349,7 @@ export default function AssinaturaDetalhe() {
                         <Text className="text-sm">
                           <CardDisplay card={alternativeCard} />
                         </Text>
+                        <Tag color="orange" className="!text-xs !m-0">Alternativo da conta</Tag>
                       </>
                     ) : (
                       <>
