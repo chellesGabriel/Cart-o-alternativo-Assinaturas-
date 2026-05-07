@@ -62,7 +62,7 @@ export default function ReativacaoSucesso() {
       <div className="flex-1 overflow-auto flex justify-center">
         <div
           className={`bg-white flex flex-col gap-8 items-center p-4 md:p-6 ${
-            isMobile ? 'w-full mt-4' : 'w-[560px] mt-16 rounded-lg h-fit'
+            isMobile ? 'w-full mt-4 pb-10' : 'w-[560px] mt-16 rounded-lg h-fit'
           }`}
         >
           {/* Icon + Title + Description */}
