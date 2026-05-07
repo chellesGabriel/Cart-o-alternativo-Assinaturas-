@@ -366,6 +366,17 @@ export function updateSubscriptionStatus(contrato: string, status: Subscription[
   if (detail) detail.status = status
   const sub = subscriptions.find((s) => s.contrato === contrato)
   if (sub) sub.status = status
+  if (status === 'Cancelado') {
+    const items = paymentHistory[contrato]
+    if (items) {
+      items.forEach((item) => {
+        if (item.status === 'Aguardando pagamento') {
+          item.status = 'Cancelada'
+          item.erroCartao = false
+        }
+      })
+    }
+  }
 }
 
 // backward compat
