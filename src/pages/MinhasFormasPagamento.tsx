@@ -483,6 +483,7 @@ export default function MinhasFormasPagamento() {
     const usages = getCardUsage(card.id)
     const inUse = usages.length > 0
     const isExpanded = expandedCardId === card.id
+    const isAccountAlternative = accountAlternativeCardId === card.id
 
     return (
       <div
@@ -494,9 +495,14 @@ export default function MinhasFormasPagamento() {
           <div className="flex items-center gap-2 min-w-0">
             <CardBrandIcon brand={card.brand} size={36} opacity={card.disabled ? 0.3 : undefined} />
             <div className="min-w-0">
-              <Text strong className={`text-base block truncate ${card.disabled ? 'opacity-30' : ''}`}>
-                {card.brand || 'Cartão'} •••• {card.last4}
-              </Text>
+              <div className={`flex items-center gap-2 ${card.disabled ? 'opacity-30' : ''}`}>
+                <Text strong className="text-base truncate">
+                  {card.brand || 'Cartão'} •••• {card.last4}
+                </Text>
+                {isAccountAlternative && (
+                  <Tag color="orange" className="!text-xs !m-0 shrink-0">Alternativo da conta</Tag>
+                )}
+              </div>
               {card.disabled ? (
                 <Text className="!text-xs !text-[#ff4d4f]">
                   Este cartão não pode ser usado no momento
