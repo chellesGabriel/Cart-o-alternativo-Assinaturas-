@@ -3,7 +3,6 @@ import {
   SearchOutlined,
   QuestionCircleOutlined,
   DownOutlined,
-  MenuOutlined,
 } from '@ant-design/icons'
 import eduzzContaLogo from '../assets/eduzz-conta-logo.png'
 import mobileTopbarIcon from '../assets/mobile-topbar-icon.svg'
