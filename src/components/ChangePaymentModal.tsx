@@ -503,6 +503,7 @@ export default function ChangePaymentModal({
                   ) : null
                 }
                 placeholder="0000 0000 0000 0000"
+                inputMode="numeric"
                 maxLength={19}
                 value={cardNumber}
                 onChange={(e) => {
@@ -561,6 +562,7 @@ export default function ChangePaymentModal({
                 >
                   <Input
                     placeholder="MM/AA"
+                    inputMode="numeric"
                     maxLength={5}
                     value={expiry}
                     onChange={(e) => {
@@ -590,6 +592,7 @@ export default function ChangePaymentModal({
                   <Input
                     prefix={<LockOutlined className="text-gray-400" />}
                     placeholder={cvvMax === 4 ? '0000' : '000'}
+                    inputMode="numeric"
                     maxLength={cvvMax}
                     value={cvv}
                     onFocus={handleCvvFocus}
@@ -621,6 +624,7 @@ export default function ChangePaymentModal({
             >
               <Input
                 placeholder="000.000.000-00"
+                inputMode="numeric"
                 maxLength={14}
                 value={cpf}
                 onChange={(e) => {
