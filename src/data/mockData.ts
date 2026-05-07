@@ -361,5 +361,12 @@ export const paymentHistory: Record<string, PaymentHistoryItem[]> = {
   ],
 }
 
+export function updateSubscriptionStatus(contrato: string, status: Subscription['status']) {
+  const detail = subscriptionDetails[contrato]
+  if (detail) detail.status = status
+  const sub = subscriptions.find((s) => s.contrato === contrato)
+  if (sub) sub.status = status
+}
+
 // backward compat
 export const subscriptionDetail: SubscriptionDetail = subscriptionDetails['3938952']

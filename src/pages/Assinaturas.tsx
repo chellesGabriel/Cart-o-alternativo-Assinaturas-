@@ -107,14 +107,16 @@ const columns: ColumnsType<Subscription> = [
   },
 ]
 
-const sortedSubscriptions = [...subscriptions].sort((a, b) => {
-  const parseDate = (d: string) => {
-    if (d === '-') return 0
-    const [day, month, year] = d.split('/')
-    return new Date(+year, +month - 1, +day).getTime()
-  }
-  return parseDate(b.inicio) - parseDate(a.inicio)
-})
+function getSortedSubscriptions() {
+  return [...subscriptions].sort((a, b) => {
+    const parseDate = (d: string) => {
+      if (d === '-') return 0
+      const [day, month, year] = d.split('/')
+      return new Date(+year, +month - 1, +day).getTime()
+    }
+    return parseDate(b.inicio) - parseDate(a.inicio)
+  })
+}
 
 function MobileSubscriptionCard({
   sub,
@@ -161,6 +163,7 @@ function MobileSubscriptionCard({
 export default function Assinaturas() {
   const navigate = useNavigate()
   const isMobile = useIsMobile()
+  const sortedSubscriptions = getSortedSubscriptions()
 
   const handleSelectSubscription = (contrato: string) => {
     navigate(`/assinaturas/${contrato}`)

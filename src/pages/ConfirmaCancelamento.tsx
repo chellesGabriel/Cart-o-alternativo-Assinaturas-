@@ -6,7 +6,7 @@ import {
   SyncOutlined,
 } from '@ant-design/icons'
 import { useParams, useNavigate } from 'react-router-dom'
-import { subscriptionDetails } from '../data/mockData'
+import { subscriptionDetails, updateSubscriptionStatus } from '../data/mockData'
 import { useIsMobile } from '../hooks/useIsMobile'
 import eduzzContaLogo from '../assets/eduzz-conta-logo.png'
 import mobileTopbarIcon from '../assets/mobile-topbar-icon.svg'
@@ -43,7 +43,7 @@ export default function ConfirmaCancelamento() {
   useEffect(() => {
     if (!processing) return
     const timer = setTimeout(() => {
-      if (detail) detail.status = 'Cancelado'
+      updateSubscriptionStatus(contrato!, 'Cancelado')
       navigate(`/assinaturas/${contrato}/cancelamento/sucesso`)
     }, 2500)
     return () => clearTimeout(timer)

@@ -6,7 +6,7 @@ import {
   SyncOutlined,
 } from '@ant-design/icons'
 import { useParams, useNavigate } from 'react-router-dom'
-import { subscriptionDetails, savedCards } from '../data/mockData'
+import { subscriptionDetails, savedCards, updateSubscriptionStatus } from '../data/mockData'
 import { useIsMobile } from '../hooks/useIsMobile'
 import CardBrandIcon from '../components/CardBrandIcon'
 import eduzzContaLogo from '../assets/eduzz-conta-logo.png'
@@ -51,9 +51,7 @@ export default function ReativacaoAssinatura() {
   useEffect(() => {
     if (!processing) return
     const timer = setTimeout(() => {
-      if (detail) {
-        detail.status = 'Em dia'
-      }
+      updateSubscriptionStatus(contrato!, 'Em dia')
       navigate(`/assinaturas/${contrato}/reativacao/sucesso`)
     }, 2500)
     return () => clearTimeout(timer)

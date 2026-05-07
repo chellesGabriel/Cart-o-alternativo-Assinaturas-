@@ -6,7 +6,7 @@ import {
   SyncOutlined,
 } from '@ant-design/icons'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
-import { subscriptionDetails } from '../data/mockData'
+import { subscriptionDetails, updateSubscriptionStatus } from '../data/mockData'
 import { useIsMobile } from '../hooks/useIsMobile'
 import eduzzContaLogo from '../assets/eduzz-conta-logo.png'
 import mobileTopbarIcon from '../assets/mobile-topbar-icon.svg'
@@ -63,9 +63,7 @@ export default function MotivosSuspensao() {
   useEffect(() => {
     if (!processing) return
     const timer = setTimeout(() => {
-      if (detail) {
-        detail.status = 'Suspenso'
-      }
+      updateSubscriptionStatus(contrato!, 'Suspenso')
       navigate(`/assinaturas/${contrato}/suspensao/sucesso?pauseDate=${encodeURIComponent(pauseDate)}`)
     }, 2500)
     return () => clearTimeout(timer)
