@@ -86,7 +86,7 @@ export default function MotivosCancelamento() {
 
       {/* Content */}
       <div className="flex-1 overflow-auto flex justify-center">
-        <div className={`bg-white flex flex-col gap-6 p-4 md:p-6 ${isMobile ? 'w-full mt-4 pb-10' : 'w-[560px] mt-16 rounded-lg h-fit'}`}>
+        <div className={`bg-white flex flex-col gap-6 p-4 md:p-6 ${isMobile ? 'w-full mt-4 pb-20 mb-16' : 'w-[560px] mt-16 rounded-lg h-fit'}`}>
           <div className="flex flex-col gap-4 w-full">
             <Title level={5} className="!mb-0">Por que cancelar sua assinatura?</Title>
 

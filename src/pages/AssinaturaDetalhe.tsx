@@ -462,7 +462,7 @@ export default function AssinaturaDetalhe() {
           {isMobile && detail.status !== 'Cancelado' && (
             <>
               <Divider className="!my-1" />
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3 mb-16">
                 {detail.status === 'Suspenso' && (
                   <Button icon={<ReloadOutlined />} type="primary" block onClick={() => navigate(`/assinaturas/${contrato}/reativacao`)}>
                     Reativar minha assinatura
