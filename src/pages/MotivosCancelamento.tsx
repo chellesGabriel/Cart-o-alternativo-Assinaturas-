@@ -122,7 +122,6 @@ export default function MotivosCancelamento() {
               </div>
               <TextArea
                 rows={2}
-                placeholder=""
                 value={comentario}
                 onChange={(e) => setComentario(e.target.value)}
               />
