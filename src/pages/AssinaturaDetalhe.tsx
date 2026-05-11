@@ -293,7 +293,7 @@ export default function AssinaturaDetalhe() {
                   <div className="flex items-center gap-2 mt-1">
                     {isBoleto ? (
                       <>
-                        <Barcode size={20} className="text-orange-500" />
+                        <Barcode size={20} className="text-black" />
                         <Text className="text-sm font-medium">Boleto bancário</Text>
                       </>
                     ) : isPix ? (
