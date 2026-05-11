@@ -13,13 +13,7 @@ import {
   Space,
   message,
 } from 'antd'
-import {
-  CreditCardOutlined,
-  LockOutlined,
-  PlusOutlined,
-  BarcodeOutlined,
-  QrcodeOutlined,
-} from '@ant-design/icons'
+import { CreditCard, Lock, Plus, Barcode, QrCode } from 'lucide-react'
 import { savedCards, type SavedCard } from '../data/mockData'
 import CreditCardPreview from './CreditCardPreview'
 import CardBrandIcon from './CardBrandIcon'
@@ -150,13 +144,6 @@ export default function ChangePaymentModal({
       ? `Cartão ${resolvedCard.brand || 'Cartão'} •••• ${resolvedCard.last4}`
       : 'Cartão'
 
-    if (target === 'alternative') {
-      message.success(`${cardLabel} definido como alternativo`)
-    } else if (target === 'primary') {
-      message.success(`${cardLabel} definido como principal`)
-    } else {
-      message.success('Forma de pagamento alterada com sucesso')
-    }
     handleClose()
   }
 
@@ -255,7 +242,7 @@ export default function ChangePaymentModal({
       title={
         title() ? (
           <div className="flex items-center gap-2">
-            <CreditCardOutlined className="text-lg" />
+            <CreditCard size={18} />
             <span>{title()}</span>
           </div>
         ) : null
@@ -377,7 +364,7 @@ export default function ChangePaymentModal({
               {/* Add new card */}
               <Button
                 type="dashed"
-                icon={<PlusOutlined />}
+                icon={<Plus size={16} />}
                 block
                 size="large"
                 onClick={() => setView('new-card')}
@@ -407,7 +394,7 @@ export default function ChangePaymentModal({
                   >
                     <div className="flex items-center gap-2 md:gap-3">
                       <Radio value="pix" />
-                      <QrcodeOutlined className="text-xl text-green-600" />
+                      <QrCode size={20} className="text-green-600" />
                       <div className="min-w-0">
                         <Text strong>PIX</Text>
                         <br />
@@ -431,7 +418,7 @@ export default function ChangePaymentModal({
                   >
                     <div className="flex items-center gap-2 md:gap-3">
                       <Radio value="boleto" />
-                      <BarcodeOutlined className="text-xl text-orange-500" />
+                      <Barcode size={20} className="text-orange-500" />
                       <div className="min-w-0">
                         <Text strong>Boleto bancário</Text>
                         <br />
@@ -494,7 +481,7 @@ export default function ChangePaymentModal({
               ]}
             >
               <Input
-                prefix={<CreditCardOutlined className="text-gray-400" />}
+                prefix={<CreditCard size={16} className="text-gray-400" />}
                 suffix={
                   cardBrand ? (
                     <Text type="secondary" className="text-xs">
@@ -590,7 +577,7 @@ export default function ChangePaymentModal({
                   ]}
                 >
                   <Input
-                    prefix={<LockOutlined className="text-gray-400" />}
+                    prefix={<Lock size={16} className="text-gray-400" />}
                     placeholder={cvvMax === 4 ? '0000' : '000'}
                     inputMode="numeric"
                     maxLength={cvvMax}
@@ -637,7 +624,7 @@ export default function ChangePaymentModal({
           </Form>
 
           <div className="flex items-center gap-2 text-gray-400 text-xs mt-1">
-            <LockOutlined />
+            <Lock size={12} />
             <Text type="secondary" className="!text-xs">
               Seus dados estão protegidos com criptografia de ponta a ponta
             </Text>

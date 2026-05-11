@@ -1,8 +1,5 @@
 import { Typography, Button } from 'antd'
-import {
-  FrownOutlined,
-  CloseOutlined,
-} from '@ant-design/icons'
+import { Frown, X } from 'lucide-react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { subscriptionDetails } from '../data/mockData'
 import { useIsMobile } from '../hooks/useIsMobile'
@@ -49,7 +46,7 @@ export default function CancelamentoSucesso() {
           )}
         </div>
         <Button type="text" onClick={handleClose} className="!flex items-center gap-2 shrink-0">
-          Fechar <CloseOutlined className="!text-xs" />
+          Fechar <X size={12} />
         </Button>
       </div>
 
@@ -66,7 +63,7 @@ export default function CancelamentoSucesso() {
         <div className={`bg-white flex flex-col gap-8 items-center p-4 md:p-6 ${isMobile ? 'w-full mt-4 pb-20 mb-16' : 'w-[560px] mt-16 rounded-lg h-fit'}`}>
           {/* Icon + Title + Description */}
           <div className="flex flex-col gap-8 items-center w-full">
-            <FrownOutlined className="!text-[64px] text-black/75" />
+            <Frown size={64} className="text-black/75" />
             <div className="flex flex-col gap-4 items-center w-full">
               <Title level={isMobile ? 3 : 2} className="!mb-0 text-center">
                 Assinatura cancelada

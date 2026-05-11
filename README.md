@@ -5,10 +5,29 @@ Sistema de gerenciamento de assinaturas da plataforma Eduzz, com funcionalidades
 ## Stack
 
 - React 19 + TypeScript
-- Vite
+- Vite 8
 - Ant Design 6
 - Tailwind CSS 4
-- React Router DOM
+- React Router DOM 7
+- Zustand (estado global)
+- Dayjs (datas pt-BR)
+- Lucide React (ícones)
+
+## Design System
+
+Este projeto consome o design system centralizado da Eduzz através de dois repositórios:
+
+- **[eduzz-design/design-tokens](https://github.com/eduzz-design/design-tokens)** — tokens de tema (cores, tipografia, bordas, componentes) do Ant Design + CSS base do Tailwind. Servidos via `https://theme.rootzz.xyz` e sincronizados automaticamente ao rodar `pnpm dev` ou `pnpm build`.
+- **[eduzz-design/design-boilerplate](https://github.com/eduzz-design/design-boilerplate)** — estrutura de projeto de referência com providers, scripts de sync, store, eslint e convenções de código que este projeto segue.
+
+### Sincronização automática
+
+Ao executar `pnpm dev`, dois scripts rodam antes do Vite:
+
+1. **`sync-tokens`** (`predev`) — baixa `tokens.json` e `index.css` atualizados do servidor de tokens e salva em `src/theme/tokens.json` e `src/index.css`.
+2. **`sync-rules`** — clona/atualiza as regras do design system do repo [eduzz-design/claude-design-rules](https://github.com/eduzz-design/claude-design-rules) para `.claude/`.
+
+Isso garante que o projeto sempre usa os tokens e regras mais recentes sem necessidade de pull manual dos repos.
 
 ---
 

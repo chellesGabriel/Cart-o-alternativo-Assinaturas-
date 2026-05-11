@@ -1,9 +1,5 @@
 import { Input, Typography, Avatar, Dropdown } from 'antd'
-import {
-  SearchOutlined,
-  QuestionCircleOutlined,
-  DownOutlined,
-} from '@ant-design/icons'
+import { Search, HelpCircle, ChevronDown } from 'lucide-react'
 import eduzzContaLogo from '../assets/eduzz-conta-logo.png'
 import mobileTopbarIcon from '../assets/mobile-topbar-icon.svg'
 
@@ -35,7 +31,7 @@ export default function AppHeader({ onMenuClick, isMobile }: Props) {
       {!isMobile && (
         <div className="flex-1 flex justify-center max-w-[345px] mx-auto">
           <Input
-            prefix={<SearchOutlined className="text-gray-400 !text-xs" />}
+            prefix={<Search className="text-gray-400" size={12} />}
             placeholder="Pesquisar no Eduzz Conta"
             className="w-full"
             size="middle"
@@ -45,7 +41,7 @@ export default function AppHeader({ onMenuClick, isMobile }: Props) {
 
       {/* Right */}
       <div className="flex items-center gap-4">
-        <QuestionCircleOutlined className="text-xl text-gray-500 cursor-pointer hover:text-gray-700" />
+        <HelpCircle className="text-gray-500 cursor-pointer hover:text-gray-700" size={20} />
         <Dropdown
           menu={{
             items: [
@@ -63,7 +59,7 @@ export default function AppHeader({ onMenuClick, isMobile }: Props) {
                 Carlos Ferrari
               </Text>
             )}
-            <DownOutlined className="!text-xs text-gray-500" />
+            <ChevronDown className="text-gray-500" size={12} />
           </div>
         </Dropdown>
       </div>

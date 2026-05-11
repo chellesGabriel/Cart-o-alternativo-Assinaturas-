@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import { Typography, Tag, Button, Collapse, Divider, Tooltip, Card, Empty, Alert } from 'antd'
+import { Typography, Tag, Button, Collapse, Divider, Tooltip, Card, Empty, Alert, message } from 'antd'
 import {
-  CreditCardOutlined,
-  QuestionCircleOutlined,
-  BarcodeOutlined,
-  CloseOutlined,
-  ArrowLeftOutlined,
-  HomeOutlined,
-  SyncOutlined,
-  ReloadOutlined,
-  DownloadOutlined,
-  QrcodeOutlined,
-  CheckCircleOutlined,
-} from '@ant-design/icons'
+  CreditCard,
+  HelpCircle,
+  Barcode,
+  X,
+  ArrowLeft,
+  Home,
+  RefreshCw,
+  RotateCcw,
+  Download,
+  QrCode,
+  CircleCheck,
+} from 'lucide-react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import {
   savedCards,
@@ -50,13 +50,13 @@ function PaymentHistoryRow({ item }: { item: PaymentHistoryItem }) {
   const actionButton = () => {
     if (!isAguardando) return null
     if (item.metodo === 'cartao') return (
-      <Button size="small" icon={<SyncOutlined />}>Trocar cartão</Button>
+      <Button size="small" icon={<RefreshCw size={16} />}>Trocar cartão</Button>
     )
     if (item.metodo === 'boleto') return (
-      <Button size="small" icon={<DownloadOutlined />}>Baixar Boleto</Button>
+      <Button size="small" icon={<Download size={16} />}>Baixar Boleto</Button>
     )
     if (item.metodo === 'pix') return (
-      <Button size="small" icon={<QrcodeOutlined />}>Pagar com Pix</Button>
+      <Button size="small" icon={<QrCode size={16} />}>Pagar com Pix</Button>
     )
     return null
   }
@@ -117,7 +117,7 @@ export default function AssinaturaDetalhe() {
       <div className="flex-1 bg-[#fafafa] min-h-screen">
         <div className="px-4 py-4 md:px-8 md:py-8">
           <div className="flex items-center gap-1 text-sm mb-4 flex-wrap">
-            <HomeOutlined className="text-gray-400" />
+            <Home size={16} className="text-gray-400" />
             <span className="text-gray-400 px-1">/</span>
             <Link to="/assinaturas" className="text-gray-400 hover:text-gray-600">Minhas assinaturas</Link>
           </div>
@@ -160,25 +160,31 @@ export default function AssinaturaDetalhe() {
       : alternativeCardId ?? null
 
   const handleConfirmPayment = (cardId: string, method?: string) => {
+    const card = savedCards.find((c) => c.id === cardId)
+    const label = card ? `${card.brand || 'Cartão'} •••• ${card.last4}` : 'Cartão'
+
     if (paymentTarget === 'alternative') {
       setAccountAlternativeCardId(cardId)
+      message.success(`Cartão ${label} definido como alternativo da conta`)
     } else if (paymentTarget === 'primary') {
-      const card = savedCards.find((c) => c.id === cardId)
       if (method === 'boleto') {
         baseDetail.formaPagamento = 'Boleto bancário'
         baseDetail.primaryCardId = ''
         baseDetail.cardFinal = ''
         baseDetail.cardBrand = 'Mastercard'
+        message.success('Forma de pagamento alterada para Boleto bancário')
       } else if (method === 'pix') {
         baseDetail.formaPagamento = 'PIX'
         baseDetail.primaryCardId = ''
         baseDetail.cardFinal = ''
         baseDetail.cardBrand = 'Mastercard'
+        message.success('Forma de pagamento alterada para PIX')
       } else if (card) {
         baseDetail.primaryCardId = cardId
         baseDetail.formaPagamento = 'Cartão de crédito'
         baseDetail.cardFinal = card.last4
         baseDetail.cardBrand = card.brand as typeof baseDetail.cardBrand
+        message.success(`Cartão ${label} definido como principal`)
       }
     }
     setTick((t) => t + 1)
@@ -189,7 +195,7 @@ export default function AssinaturaDetalhe() {
       <div className="px-4 py-4 md:px-8 md:py-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-1 text-sm mb-4 flex-wrap">
-          <HomeOutlined className="text-gray-400" />
+          <Home size={16} className="text-gray-400" />
           <span className="text-gray-400 px-1">/</span>
           <Link to="/assinaturas" className="text-gray-400 hover:text-gray-600">Minhas assinaturas</Link>
         </div>
@@ -198,7 +204,7 @@ export default function AssinaturaDetalhe() {
         {isMobile && (
           <Button
             type="text"
-            icon={<ArrowLeftOutlined />}
+            icon={<ArrowLeft size={16} />}
             onClick={() => navigate('/assinaturas')}
             className="!px-0 !mb-2"
           >
@@ -214,11 +220,11 @@ export default function AssinaturaDetalhe() {
           {!isMobile && detail.status !== 'Cancelado' && (
             <div className="flex items-center gap-3">
               {detail.status === 'Suspenso' && (
-                <Button icon={<ReloadOutlined />} type="primary" onClick={() => navigate(`/assinaturas/${contrato}/reativacao`)}>
+                <Button icon={<RotateCcw size={16} />} type="primary" onClick={() => navigate(`/assinaturas/${contrato}/reativacao`)}>
                   Reativar minha assinatura
                 </Button>
               )}
-              <Button danger icon={<CloseOutlined />} onClick={() => navigate(`/assinaturas/${contrato}/suspensao`)}>
+              <Button danger icon={<X size={16} />} onClick={() => navigate(`/assinaturas/${contrato}/suspensao`)}>
                 Cancelar Assinatura
               </Button>
             </div>
@@ -287,12 +293,12 @@ export default function AssinaturaDetalhe() {
                   <div className="flex items-center gap-2 mt-1">
                     {isBoleto ? (
                       <>
-                        <BarcodeOutlined className="text-xl text-orange-500" />
+                        <Barcode size={20} className="text-orange-500" />
                         <Text className="text-sm font-medium">Boleto bancário</Text>
                       </>
                     ) : isPix ? (
                       <>
-                        <QrcodeOutlined className="text-xl text-green-600" />
+                        <QrCode size={20} className="text-green-600" />
                         <Text className="text-sm font-medium">PIX</Text>
                       </>
                     ) : primaryCard ? (
@@ -304,7 +310,7 @@ export default function AssinaturaDetalhe() {
                       </>
                     ) : (
                       <>
-                        <CreditCardOutlined className="text-gray-400" />
+                        <CreditCard size={16} className="text-gray-400" />
                         <Text className="text-sm text-gray-400">Cartão não definido</Text>
                       </>
                     )}
@@ -319,7 +325,7 @@ export default function AssinaturaDetalhe() {
                     <span className="flex items-center gap-1">
                       <Text type="secondary" className="text-xs">Alternativa</Text>
                       <Tooltip title="O cartão alternativo da sua conta é usado automaticamente caso a cobrança no método principal falhe em qualquer contrato, evitando interrupções no seu acesso.">
-                        <QuestionCircleOutlined className="text-xs text-gray-400 cursor-help" />
+                        <HelpCircle size={12} className="text-gray-400 cursor-help" />
                       </Tooltip>
                     </span>
                     {alternativeCard ? (
@@ -352,7 +358,7 @@ export default function AssinaturaDetalhe() {
                       </>
                     ) : (
                       <>
-                        <CreditCardOutlined className="text-gray-400" />
+                        <CreditCard size={16} className="text-gray-400" />
                         <Text className="text-sm text-gray-400">
                           Nenhum cartão cadastrado
                         </Text>
@@ -463,11 +469,11 @@ export default function AssinaturaDetalhe() {
               <Divider className="!my-1" />
               <div className="flex flex-col gap-3 mb-16">
                 {detail.status === 'Suspenso' && (
-                  <Button icon={<ReloadOutlined />} type="primary" block onClick={() => navigate(`/assinaturas/${contrato}/reativacao`)}>
+                  <Button icon={<RotateCcw size={16} />} type="primary" block onClick={() => navigate(`/assinaturas/${contrato}/reativacao`)}>
                     Reativar minha assinatura
                   </Button>
                 )}
-                <Button danger icon={<CloseOutlined />} onClick={() => navigate(`/assinaturas/${contrato}/suspensao`)} block>
+                <Button danger icon={<X size={16} />} onClick={() => navigate(`/assinaturas/${contrato}/suspensao`)} block>
                   Cancelar Assinatura
                 </Button>
               </div>
@@ -491,7 +497,7 @@ export default function AssinaturaDetalhe() {
                 </Text>
                 {dentroDosPrazos ? (
                   <div className="flex items-start gap-2">
-                    <CheckCircleOutlined className="text-[#52c41a] mt-0.5" />
+                    <CircleCheck size={16} className="text-[#52c41a] mt-0.5" />
                     <Text className="text-sm">
                       Seu reembolso foi solicitado - {detail.canceladoEm || '-'}
                     </Text>

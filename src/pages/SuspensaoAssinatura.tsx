@@ -1,11 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Typography, Button, Divider, InputNumber } from 'antd'
-import {
-  PauseCircleOutlined,
-  MinusOutlined,
-  PlusOutlined,
-  CloseOutlined,
-} from '@ant-design/icons'
+import { CirclePause, Minus, Plus, X } from 'lucide-react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { subscriptionDetails } from '../data/mockData'
 import { useIsMobile } from '../hooks/useIsMobile'
@@ -67,7 +62,7 @@ export default function SuspensaoAssinatura() {
           )}
         </div>
         <Button type="text" onClick={handleClose} className="!flex items-center gap-2 shrink-0">
-          Fechar <CloseOutlined className="!text-xs" />
+          Fechar <X size={12} />
         </Button>
       </div>
 
@@ -92,7 +87,7 @@ export default function SuspensaoAssinatura() {
           }`}
         >
           {/* Icon */}
-          <PauseCircleOutlined className="!text-[64px] text-black/75" />
+          <CirclePause size={64} className="text-black/75" />
 
           {/* Title + Description */}
           <div className="flex flex-col gap-4 items-center w-full">
@@ -122,7 +117,7 @@ export default function SuspensaoAssinatura() {
             {/* Counter */}
             <div className="flex items-center gap-2">
               <Button
-                icon={<MinusOutlined />}
+                icon={<Minus size={16} />}
                 onClick={() => setMeses((v) => Math.max(1, v - 1))}
                 disabled={meses <= 1}
                 className="!w-10 !h-10"
@@ -138,7 +133,7 @@ export default function SuspensaoAssinatura() {
                 size="large"
               />
               <Button
-                icon={<PlusOutlined />}
+                icon={<Plus size={16} />}
                 onClick={() => setMeses((v) => Math.min(6, v + 1))}
                 disabled={meses >= 6}
                 className="!w-10 !h-10 !border-[#0d2772] !text-[#0d2772]"
@@ -166,7 +161,7 @@ export default function SuspensaoAssinatura() {
             <Button
               type="primary"
               size="large"
-              icon={<PauseCircleOutlined />}
+              icon={<CirclePause size={16} />}
               block
               onClick={() => navigate(`/assinaturas/${contrato}/suspensao/motivos?meses=${meses}&pauseDate=${encodeURIComponent(pauseDate)}`)}
             >
@@ -176,7 +171,7 @@ export default function SuspensaoAssinatura() {
               danger
               ghost
               size="large"
-              icon={<CloseOutlined />}
+              icon={<X size={16} />}
               block
               onClick={() => navigate(`/assinaturas/${contrato}/cancelamento/motivos`)}
             >

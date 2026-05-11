@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Typography, Button, Alert, Modal } from 'antd'
-import {
-  WarningOutlined,
-  CloseOutlined,
-  SyncOutlined,
-} from '@ant-design/icons'
+import { TriangleAlert, X, RefreshCw } from 'lucide-react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { subscriptionDetails, updateSubscriptionStatus } from '../data/mockData'
 import { useIsMobile } from '../hooks/useIsMobile'
@@ -68,7 +64,7 @@ export default function ConfirmaCancelamento() {
           )}
         </div>
         <Button type="text" onClick={handleClose} className="!flex items-center gap-2 shrink-0">
-          Fechar <CloseOutlined className="!text-xs" />
+          Fechar <X size={12} />
         </Button>
       </div>
 
@@ -90,7 +86,7 @@ export default function ConfirmaCancelamento() {
         <div className={`bg-white flex flex-col gap-8 items-center p-4 md:p-6 ${isMobile ? 'w-full mt-4 pb-20 mb-16' : 'w-[560px] mt-16 rounded-lg h-fit'}`}>
           {/* Icon + Title + Description */}
           <div className="flex flex-col gap-8 items-center w-full">
-            <WarningOutlined className="!text-[64px] !text-[#ff4d4f]" />
+            <TriangleAlert size={64} className="text-[#ff4d4f]" />
             <div className="flex flex-col gap-4 items-center w-full">
               <Title level={isMobile ? 3 : 2} className="!mb-0 text-center">
                 Você está prestes a perder
@@ -148,7 +144,7 @@ export default function ConfirmaCancelamento() {
                 type="primary"
                 danger
                 size="large"
-                icon={<CloseOutlined />}
+                icon={<X size={16} />}
                 block
                 onClick={handleCancelar}
               >
@@ -172,7 +168,7 @@ export default function ConfirmaCancelamento() {
         width={isMobile ? '90%' : 520}
       >
         <div className="flex flex-col items-center gap-4 py-4">
-          <SyncOutlined spin className="!text-[64px] text-black/75" />
+          <RefreshCw size={64} className="animate-spin text-black/75" />
           <div className="flex flex-col items-center gap-4 w-full">
             <Title level={isMobile ? 3 : 2} className="!mb-0 text-center">
               Cancelando assinatura...

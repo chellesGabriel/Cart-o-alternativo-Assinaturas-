@@ -19,18 +19,18 @@ import {
   message,
 } from 'antd'
 import {
-  HomeOutlined,
-  PlusOutlined,
-  DeleteOutlined,
-  QuestionCircleOutlined,
-  CreditCardOutlined,
-  LockOutlined,
-  DownOutlined,
-  UpOutlined,
-  MoreOutlined,
-  StarOutlined,
-  SafetyOutlined,
-} from '@ant-design/icons'
+  Home,
+  Plus,
+  Trash2,
+  HelpCircle,
+  CreditCard,
+  Lock,
+  ChevronDown,
+  ChevronUp,
+  MoreVertical,
+  Star,
+  ShieldCheck,
+} from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import {
   savedCards,
@@ -379,7 +379,9 @@ export default function MinhasFormasPagamento() {
     setAccountAlternativeCardId(cardId)
     setCards([...savedCards])
     forceUpdate()
-    message.success('Cartão alternativo da conta definido com sucesso')
+    const card = savedCards.find((c) => c.id === cardId)
+    const label = card ? `${card.brand || 'Cartão'} •••• ${card.last4}` : 'Cartão'
+    message.success(`Cartão ${label} definido como alternativo da conta`)
   }
 
   const usageColumns = [
@@ -445,7 +447,7 @@ export default function MinhasFormasPagamento() {
       return [
         {
           key: 'delete',
-          icon: <DeleteOutlined />,
+          icon: <Trash2 size={16} />,
           label: 'Excluir cartão',
           danger: true,
           onClick: () => handleDelete(card),
@@ -456,14 +458,14 @@ export default function MinhasFormasPagamento() {
     return [
       {
         key: 'primary',
-        icon: <StarOutlined />,
+        icon: <Star size={16} />,
         label: 'Usar como principal em todos',
         disabled: isAlreadyPrimaryInAll || allContracts.length === 0,
         onClick: () => handleSetPrimaryAll(card),
       },
       {
         key: 'alternative',
-        icon: <SafetyOutlined />,
+        icon: <ShieldCheck size={16} />,
         label: 'Definir como alternativo da conta',
         disabled: isAlreadyAlternative || isPrimaryInAny,
         onClick: () => handleSetAlternative(card),
@@ -471,7 +473,7 @@ export default function MinhasFormasPagamento() {
       { type: 'divider' as const },
       {
         key: 'delete',
-        icon: <DeleteOutlined />,
+        icon: <Trash2 size={16} />,
         label: 'Excluir cartão',
         danger: true,
         onClick: () => handleDelete(card),
@@ -520,7 +522,7 @@ export default function MinhasFormasPagamento() {
             menu={{ items: cardDropdownItems(card) }}
             trigger={['click']}
           >
-            <Button type="text" icon={<MoreOutlined style={{ fontSize: 18 }} />} className="flex-shrink-0" />
+            <Button type="text" icon={<MoreVertical size={18} />} className="flex-shrink-0" />
           </Dropdown>
         </div>
 
@@ -568,9 +570,9 @@ export default function MinhasFormasPagamento() {
                 {isExpanded ? 'Ocultar' : 'Ver uso'}
               </Text>
               {isExpanded ? (
-                <UpOutlined className="!text-xs !text-[#0d2772]" />
+                <ChevronUp size={12} className="!text-[#0d2772]" />
               ) : (
-                <DownOutlined className="!text-xs !text-[#0d2772]" />
+                <ChevronDown size={12} className="!text-[#0d2772]" />
               )}
             </div>
           </>
@@ -621,7 +623,7 @@ export default function MinhasFormasPagamento() {
               <Button
                 type="link"
                 size="small"
-                icon={isExpanded ? <UpOutlined /> : <DownOutlined />}
+                icon={isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 onClick={() => setExpandedCardId(isExpanded ? null : card.id)}
               >
                 {isExpanded ? 'Ocultar' : 'Onde está sendo usado'}
@@ -631,7 +633,7 @@ export default function MinhasFormasPagamento() {
               menu={{ items: cardDropdownItems(card) }}
               trigger={['click']}
             >
-              <Button type="text" icon={<MoreOutlined style={{ fontSize: 20 }} />} />
+              <Button type="text" icon={<MoreVertical size={20} />} />
             </Dropdown>
           </div>
         </div>
@@ -660,7 +662,7 @@ export default function MinhasFormasPagamento() {
       <div className="px-4 py-4 md:px-8 md:py-6">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
-          <HomeOutlined />
+          <Home size={16} />
           <span>/</span>
           <Text type="secondary">Meus cartões</Text>
         </div>
@@ -677,7 +679,7 @@ export default function MinhasFormasPagamento() {
           </div>
           <Button
             type="primary"
-            icon={<PlusOutlined />}
+            icon={<Plus size={16} />}
             size="large"
             onClick={() => setAddModalOpen(true)}
             block={isMobile}
@@ -720,7 +722,7 @@ export default function MinhasFormasPagamento() {
                   >
                     <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                       <div className="flex gap-3 items-start">
-                        <SafetyOutlined className="text-2xl text-[#faad14] mt-0.5 flex-shrink-0" />
+                        <ShieldCheck size={24} className="text-[#faad14] mt-0.5 flex-shrink-0" />
                         <div>
                           <Text strong className="block text-sm md:text-base">
                             Proteja suas assinaturas com um cartão alternativo
@@ -761,7 +763,7 @@ export default function MinhasFormasPagamento() {
         title={
           addView === 'form' ? (
             <div className="flex items-center gap-2">
-              <CreditCardOutlined className="text-lg" />
+              <CreditCard size={18} />
               <span>Cadastrar novo cartão</span>
             </div>
           ) : null
@@ -802,7 +804,7 @@ export default function MinhasFormasPagamento() {
                 ]}
               >
                 <Input
-                  prefix={<CreditCardOutlined className="text-gray-400" />}
+                  prefix={<CreditCard size={16} className="text-gray-400" />}
                   suffix={
                     cardBrand ? (
                       <Text type="secondary" className="text-xs">
@@ -893,7 +895,7 @@ export default function MinhasFormasPagamento() {
                     ]}
                   >
                     <Input
-                      prefix={<LockOutlined className="text-gray-400" />}
+                      prefix={<Lock size={16} className="text-gray-400" />}
                       placeholder={cvvMax === 4 ? '0000' : '000'}
                       inputMode="numeric"
                       maxLength={cvvMax}
@@ -960,7 +962,7 @@ export default function MinhasFormasPagamento() {
                       <span className="inline-flex items-center gap-2 md:gap-1">
                         <Text className="!text-base md:!text-sm">Como forma de pagamento principal</Text>
                         <Tooltip title="Todas as cobranças futuras dos seus contratos serão realizadas neste cartão.">
-                          <QuestionCircleOutlined className="text-lg md:text-xs text-gray-400 cursor-help" />
+                          <HelpCircle size={18} className="text-gray-400 cursor-help" />
                         </Tooltip>
                       </span>
                     </Radio>
@@ -968,7 +970,7 @@ export default function MinhasFormasPagamento() {
                       <span className="inline-flex items-center gap-2 md:gap-1">
                         <Text className="!text-base md:!text-sm">Como cartão alternativo da conta</Text>
                         <Tooltip title="Este cartão será usado automaticamente caso a cobrança no método principal falhe em qualquer contrato, evitando interrupções no seu acesso.">
-                          <QuestionCircleOutlined className="text-lg md:text-xs text-gray-400 cursor-help" />
+                          <HelpCircle size={18} className="text-gray-400 cursor-help" />
                         </Tooltip>
                       </span>
                     </Radio>
@@ -978,7 +980,7 @@ export default function MinhasFormasPagamento() {
             </div>
 
             <div className="flex items-center gap-2 text-gray-400 text-xs mt-3">
-              <LockOutlined />
+              <Lock size={16} />
               <Text type="secondary" className="!text-xs">
                 Seus dados estão protegidos com criptografia de ponta a ponta
               </Text>

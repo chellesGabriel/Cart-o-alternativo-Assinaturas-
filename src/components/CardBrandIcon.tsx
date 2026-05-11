@@ -1,4 +1,4 @@
-import { CreditCardOutlined } from '@ant-design/icons'
+import { CreditCard } from 'lucide-react'
 import brandMastercard from '../assets/brand-mastercard.svg'
 import brandVisa from '../assets/brand-visa.svg'
 import brandElo from '../assets/brand-elo.svg'
@@ -42,7 +42,7 @@ export default function CardBrandIcon({ brand, size = 35, opacity }: Props) {
       className="relative border border-[#e4e4e7] rounded flex-shrink-0 overflow-hidden flex items-center justify-center bg-white"
       style={{ width: size, height: h, opacity }}
     >
-      <CreditCardOutlined className="text-gray-400" style={{ fontSize: Math.round(h * 0.55) }} />
+      <CreditCard className="text-gray-400" size={Math.round(h * 0.55)} />
     </div>
   )
 }

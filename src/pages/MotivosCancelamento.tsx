@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Typography, Button, Checkbox, Input, Divider } from 'antd'
-import { CloseOutlined } from '@ant-design/icons'
+import { X } from 'lucide-react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { subscriptionDetails } from '../data/mockData'
 import { useIsMobile } from '../hooks/useIsMobile'
@@ -67,7 +67,7 @@ export default function MotivosCancelamento() {
           )}
         </div>
         <Button type="text" onClick={handleClose} className="!flex items-center gap-2 shrink-0">
-          Fechar <CloseOutlined className="!text-xs" />
+          Fechar <X size={12} />
         </Button>
       </div>
 
@@ -122,7 +122,7 @@ export default function MotivosCancelamento() {
               </div>
               <TextArea
                 rows={2}
-                placeholder="Textarea"
+                placeholder=""
                 value={comentario}
                 onChange={(e) => setComentario(e.target.value)}
               />

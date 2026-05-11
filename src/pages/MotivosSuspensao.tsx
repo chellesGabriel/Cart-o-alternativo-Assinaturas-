@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Typography, Button, Checkbox, Input, Alert, Modal } from 'antd'
-import {
-  PauseCircleOutlined,
-  CloseOutlined,
-  SyncOutlined,
-} from '@ant-design/icons'
+import { CirclePause, X, RefreshCw } from 'lucide-react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { subscriptionDetails, updateSubscriptionStatus } from '../data/mockData'
 import { useIsMobile } from '../hooks/useIsMobile'
@@ -90,7 +86,7 @@ export default function MotivosSuspensao() {
           )}
         </div>
         <Button type="text" onClick={handleClose} className="!flex items-center gap-2 shrink-0">
-          Fechar <CloseOutlined className="!text-xs" />
+          Fechar <X size={12} />
         </Button>
       </div>
 
@@ -178,7 +174,7 @@ export default function MotivosSuspensao() {
             <Button
               type="primary"
               size="large"
-              icon={<PauseCircleOutlined />}
+              icon={<CirclePause size={16} />}
               block
               disabled={!hasSelection}
               onClick={handleConfirmar}
@@ -206,7 +202,7 @@ export default function MotivosSuspensao() {
         width={isMobile ? '90%' : 520}
       >
         <div className="flex flex-col items-center gap-4 py-4">
-          <SyncOutlined spin className="!text-[64px] text-black/75" />
+          <RefreshCw size={64} className="animate-spin text-black/75" />
           <div className="flex flex-col items-center gap-4 w-full">
             <Title level={isMobile ? 3 : 2} className="!mb-0 text-center">
               Suspendendo assinatura...

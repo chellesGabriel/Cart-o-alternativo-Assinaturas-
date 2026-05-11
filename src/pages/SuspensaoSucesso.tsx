@@ -1,9 +1,5 @@
 import { Typography, Button } from 'antd'
-import {
-  CheckCircleOutlined,
-  CalendarOutlined,
-  CloseOutlined,
-} from '@ant-design/icons'
+import { CircleCheck, Calendar, X } from 'lucide-react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { subscriptionDetails } from '../data/mockData'
 import { useIsMobile } from '../hooks/useIsMobile'
@@ -54,7 +50,7 @@ export default function SuspensaoSucesso() {
           )}
         </div>
         <Button type="text" onClick={handleClose} className="!flex items-center gap-2 shrink-0">
-          Fechar <CloseOutlined className="!text-xs" />
+          Fechar <X size={12} />
         </Button>
       </div>
 
@@ -75,7 +71,7 @@ export default function SuspensaoSucesso() {
         >
           {/* Icon + Title + Description */}
           <div className="flex flex-col gap-8 items-center w-full">
-            <CheckCircleOutlined className="!text-[64px] !text-[#52c41a]" />
+            <CircleCheck size={64} className="text-[#52c41a]" />
             <div className="flex flex-col gap-4 items-center w-full">
               <Title
                 level={isMobile ? 3 : 2}
@@ -107,7 +103,7 @@ export default function SuspensaoSucesso() {
                   Retomada automática
                 </Title>
                 <div className="flex items-center gap-2">
-                  <CalendarOutlined className="text-base" />
+                  <Calendar size={16} />
                   <Text strong className="!text-base">{pauseDate}</Text>
                 </div>
               </div>

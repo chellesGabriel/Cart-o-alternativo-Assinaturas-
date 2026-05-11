@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Typography, Button, Divider, Modal } from 'antd'
-import {
-  ReloadOutlined,
-  CloseOutlined,
-  SyncOutlined,
-} from '@ant-design/icons'
+import { RotateCcw, X, RefreshCw } from 'lucide-react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { subscriptionDetails, savedCards, updateSubscriptionStatus } from '../data/mockData'
 import { useIsMobile } from '../hooks/useIsMobile'
@@ -76,7 +72,7 @@ export default function ReativacaoAssinatura() {
           )}
         </div>
         <Button type="text" onClick={handleClose} className="!flex items-center gap-2 shrink-0">
-          Fechar <CloseOutlined className="!text-xs" />
+          Fechar <X size={12} />
         </Button>
       </div>
 
@@ -102,7 +98,7 @@ export default function ReativacaoAssinatura() {
         >
           {/* Icon + Title + Description */}
           <div className="flex flex-col gap-8 items-center w-full">
-            <ReloadOutlined className="!text-[64px] text-black/75" />
+            <RotateCcw size={64} className="text-black/75" />
             <div className="flex flex-col gap-4 items-center w-full">
               <Title level={isMobile ? 3 : 2} className="!mb-0 text-center">
                 Reativar assinatura agora?
@@ -142,7 +138,7 @@ export default function ReativacaoAssinatura() {
             <Button
               type="primary"
               size="large"
-              icon={<ReloadOutlined />}
+              icon={<RotateCcw size={16} />}
               block
               onClick={handleReativar}
             >
@@ -169,7 +165,7 @@ export default function ReativacaoAssinatura() {
         width={isMobile ? '90%' : 520}
       >
         <div className="flex flex-col items-center gap-4 py-4">
-          <SyncOutlined spin className="!text-[64px] text-black/75" />
+          <RefreshCw size={64} className="animate-spin text-black/75" />
           <div className="flex flex-col items-center gap-4 w-full">
             <Title level={isMobile ? 3 : 2} className="!mb-0 text-center">
               Reativando assinatura...

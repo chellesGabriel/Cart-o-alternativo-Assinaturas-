@@ -1,15 +1,20 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { ConfigProvider } from 'antd'
-import ptBR from 'antd/locale/pt_BR'
-import eduzzTheme from './theme/eduzzTheme'
-import './index.css'
-import App from './App.tsx'
+import './index.css';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <ConfigProvider locale={ptBR} theme={eduzzTheme}>
-      <App />
-    </ConfigProvider>
-  </StrictMode>,
-)
+import { StrictMode } from 'react';
+
+import { createRoot } from 'react-dom/client';
+
+import App from './App';
+import Providers from './providers';
+
+const rootElement = document.getElementById('root');
+
+if (rootElement) {
+  createRoot(rootElement).render(
+    <StrictMode>
+      <Providers>
+        <App />
+      </Providers>
+    </StrictMode>
+  );
+}

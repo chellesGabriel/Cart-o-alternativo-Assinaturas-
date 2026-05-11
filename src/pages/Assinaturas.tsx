@@ -1,6 +1,6 @@
 import { Typography, Tag, Card, Table, Empty } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
-import { RightOutlined } from '@ant-design/icons'
+import { ChevronRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { subscriptions, subscriptionDetails, type Subscription } from '../data/mockData'
 import { useIsMobile } from '../hooks/useIsMobile'
@@ -101,7 +101,7 @@ const columns: ColumnsType<Subscription> = [
     width: 52,
     render: () => (
       <div className="flex items-center justify-center">
-        <RightOutlined className="text-xs text-gray-400" />
+        <ChevronRight className="text-gray-400" size={12} />
       </div>
     ),
   },
@@ -154,7 +154,7 @@ function MobileSubscriptionCard({
             </div>
           </div>
         </div>
-        <RightOutlined className="text-gray-400 ml-2 flex-shrink-0" />
+        <ChevronRight className="text-gray-400 ml-2 flex-shrink-0" size={16} />
       </div>
     </Card>
   )
