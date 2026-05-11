@@ -11,7 +11,6 @@ import {
   Col,
   Radio,
   Space,
-  message,
 } from 'antd'
 import { CreditCard, Lock, Plus, Barcode, QrCode } from 'lucide-react'
 import { savedCards, type SavedCard } from '../data/mockData'
@@ -139,11 +138,6 @@ export default function ChangePaymentModal({
     } else if (cardId) {
       onConfirm(cardId, 'card')
     }
-    const resolvedCard = cardOverride ?? selectedCard
-    const cardLabel = resolvedCard
-      ? `Cartão ${resolvedCard.brand || 'Cartão'} •••• ${resolvedCard.last4}`
-      : 'Cartão'
-
     handleClose()
   }
 
