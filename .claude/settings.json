@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "antd": {
+      "command": "npx",
+      "args": ["-y", "@ant-design/cli@latest", "mcp"]
+    }
+  },
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:theme.rootzz.xyz)",
+      "WebFetch(domain:ds.rootzz.xyz)"
+    ]
+  }
+}
